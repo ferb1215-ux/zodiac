@@ -7,6 +7,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Zodiac Fighters">
+<meta name="theme-color" content="#0d2137">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Zodiac Fighters — v0.1</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -42,6 +45,16 @@
   .cell.sel { border-color:#9d2235; background:#ffe9e9; }
   .cell.cpu { border-color:#2e6e5e; background:#e3f2ec; }
   #selInfo { min-height:38px; font-size:13px; }
+  /* --- aviso "agregar a pantalla de inicio" (iPhone) --- */
+  #iosBanner { position:fixed; left:50%; transform:translateX(-50%); z-index:60;
+    bottom:max(14px, env(safe-area-inset-bottom)); width:min(92vw,440px);
+    background:#f7f1e3; color:#1a1a2e; border-radius:14px; padding:14px 16px 10px;
+    box-shadow:0 8px 30px rgba(0,0,0,.5); text-align:center; }
+  #iosBanner .ib-txt { font-size:14px; line-height:1.4; }
+  #iosBanner .ib-arrow { font-size:26px; margin-top:4px; animation:bounce 1.1s infinite; }
+  #iosClose { position:absolute; top:6px; right:8px; background:none; border:none;
+    font-size:18px; color:#8a93a6; cursor:pointer; }
+  @keyframes bounce { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(6px);} }
 </style>
 </head>
 <body>
@@ -59,7 +72,16 @@
     <p><b>Stick</b> = moverte · sostener <b>atrás</b> = bloquear · <b>A</b> = golpe (mantén = smash) · <b>B</b> = especial · <b>B+↑</b> = recovery · <b>✊</b> = agarre</p>
     <p style="font-size:12px;color:#8a93a6">En PC: <b>flechas</b> = moverse · <b>A</b> = golpe (mantén = smash) · <b>S</b> = especial · <b>X</b> = agarre · <b>↑/Espacio</b> = saltar</p>
     <button class="btn" id="start">Elegir peleador</button>
+    <button class="btn alt" id="fs">⛶ Pantalla completa</button>
+    <button class="btn alt hidden" id="install">⬇️ Instalar app</button>
+    <p id="iosHint" class="hidden" style="font-size:12px;color:#9d2235">En iPhone: toca el botón <b>Compartir</b> ⬆️ de Safari y elige <b>"Agregar a pantalla de inicio"</b>. Ábrelo desde ese ícono y se verá a pantalla completa.</p>
   </div>
+</div>
+
+<div id="iosBanner" class="hidden">
+  <button id="iosClose">✕</button>
+  <div class="ib-txt">📲 <b>Pon el juego en pantalla completa:</b><br>toca <b>Compartir</b> y elige <b>"Agregar a pantalla de inicio"</b>.</div>
+  <div class="ib-arrow">⬇️</div>
 </div>
 
 <div id="select" class="overlay hidden">
@@ -838,7 +860,28 @@ function updateFightBtn(){
   $('fightBtn').disabled=!ok; $('fightBtn').style.opacity=ok?1:.5;
   $('selTitle').textContent = ST.selP===null?'Elige tu peleador': ST.selC===null?'Ahora elige al rival CPU (u "CPU al azar")':'¡Listo para pelear!';
 }
-$('start').onclick=()=>{ ac(); $('title').classList.add('hidden'); $('select').classList.remove('hidden'); ST.mode='select'; };
+function goFullscreen(){ const el=document.documentElement; const rf=el.requestFullscreen||el.webkitRequestFullscreen; if(rf){ try{ rf.call(el); }catch(e){} } setTimeout(resize,300); }
+const fsSupported=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
+$('fs').onclick=()=>{ if(fsSupported){ goFullscreen(); } else { $('iosHint').classList.remove('hidden'); $('fs').classList.add('hidden'); } };
+$('start').onclick=()=>{ ac(); if(fsSupported) goFullscreen(); $('title').classList.add('hidden'); $('select').classList.remove('hidden'); ST.mode='select'; };
+
+/* ===== App instalable: service worker + prompts ===== */
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }); }
+
+/* Android / escritorio: instalación real en 1 toque */
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); deferredPrompt=e;
+  $('install').classList.remove('hidden'); $('fs').classList.add('hidden'); });
+$('install').onclick=async()=>{ if(!deferredPrompt) return;
+  deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; $('install').classList.add('hidden'); };
+window.addEventListener('appinstalled',()=>{ $('install').classList.add('hidden'); });
+
+/* iPhone: aviso visual automático (Apple no permite instalación automática) */
+const isIOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const standalone=(window.navigator.standalone===true)||window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches;
+if(isIOS&&!standalone){ $('fs').classList.add('hidden'); setTimeout(()=>$('iosBanner').classList.remove('hidden'),900); }
+$('iosClose').onclick=()=>$('iosBanner').classList.add('hidden');
+if(standalone){ $('fs').classList.add('hidden'); }
 $('randBtn').onclick=()=>{ if(ST.selP===null) return;
   let i; do{ i=Math.floor(Math.random()*12); }while(i===ST.selP);
   ST.selC=i; [...grid.children].forEach((el,j)=>el.classList.toggle('cpu',j===i)); startFight(); };
