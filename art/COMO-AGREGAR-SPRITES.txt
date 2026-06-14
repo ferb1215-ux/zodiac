@@ -1,0 +1,26 @@
+CÓMO FUNCIONAN LOS SPRITES (arte ilustrado)
+============================================
+
+El juego busca imágenes en esta carpeta "art/" con estos nombres exactos:
+
+  art/rata-idle.png      art/rata-ready.png    art/rata-hit.png    art/rata-ko.png
+  art/tigre-idle.png     art/tigre-ready.png   art/tigre-hit.png   art/tigre-ko.png
+  ... y así para los 12 personajes.
+
+Estados (las 4 emociones que enviaste):
+  idle  = "tranquilo"
+  ready = "a punto de pelear"
+  hit   = "golpeado"
+  ko    = "tumbado / KO"
+
+IDs de los 12 personajes (en minúscula, sin tilde):
+  rata, buey, tigre, conejo, dragon, serpiente, caballo, cabra, mono, gallo, perro, cerdo
+
+Reglas:
+- PNG con FONDO TRANSPARENTE.
+- Personaje mirando a la DERECHA (el juego lo voltea solo).
+- Si falta un estado, el juego usa "idle" como respaldo. Si no hay ninguno,
+  usa el dibujo sencillo automático. Así nunca se rompe.
+
+Yo (Claude) genero estos archivos a partir de las imágenes que me pases.
+Solo guarda tus imágenes en la carpeta del proyecto y avísame.

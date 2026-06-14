@@ -748,7 +748,10 @@ function drawStage(th,t){
 /* ---------- sprites ilustrados (si existen art/{id}-{estado}.png) ---------- */
 const SPR={}, SPR_SCALE=2.05;
 function loadSpr(id,st){ const k=id+'-'+st; if(SPR[k]!==undefined) return SPR[k];
-  const o={img:new Image(),ok:false}; o.img.onload=()=>o.ok=true; o.img.onerror=()=>o.ok=false; o.img.src='art/'+k+'.png'; SPR[k]=o; return o; }
+  const o={img:new Image(),ok:false,tried:0};
+  o.img.onload=()=>{ o.ok=true; };
+  o.img.onerror=()=>{ if(o.tried===0){ o.tried=1; o.img.src='art/'+k+'.png'; } else { o.ok=false; } };
+  o.img.src=k+'.png'; SPR[k]=o; return o; }
 function preloadSprites(ch){ ['idle','ready','hit','ko'].forEach(s=>loadSpr(ch.id,s)); }
 function spriteState(f){ if(f.state==='ko'||f.state==='down'||f.state==='getup') return 'ko';
   if(f.state==='hit') return 'hit'; if(f.state==='atk') return 'ready';
