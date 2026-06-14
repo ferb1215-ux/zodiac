@@ -123,24 +123,241 @@
     box-shadow: inset 0 0 0 5px #241d4a, inset 0 0 0 9px #6a5db0, inset 0 0 55px rgba(0,0,0,.45); }
   #crt::after{ content:""; position:absolute; inset:9px; border-radius:9px; pointer-events:none; opacity:.45;
     background:repeating-linear-gradient(rgba(0,0,0,.10) 0 1px, transparent 1px 3px); mix-blend-mode:multiply; }
-  /* ===== mando estilo GBA ===== */
-  #dpad{ position:fixed; z-index:9; left:max(18px,env(safe-area-inset-left)); bottom:max(18px,env(safe-area-inset-bottom)); width:150px; height:150px; }
-  .dbtn{ position:absolute; width:50px; height:50px; border:none; font-size:18px; font-weight:900; color:#cfc7ff;
+  /* ===== mando estilo GBA (compacto y semitransparente para ver el escenario) ===== */
+  #dpad{ position:fixed; z-index:9; left:max(12px,env(safe-area-inset-left)); bottom:max(12px,env(safe-area-inset-bottom)); width:108px; height:108px; opacity:.82; }
+  .dbtn{ position:absolute; width:36px; height:36px; border:none; font-size:14px; font-weight:900; color:#cfc7ff;
     background:linear-gradient(180deg,#3a3360,#211c40); box-shadow:0 3px 0 #14102a, inset 0 1px 2px rgba(255,255,255,.18);
     display:flex; align-items:center; justify-content:center; pointer-events:auto; touch-action:none; -webkit-user-select:none; user-select:none; }
-  #dUp{ left:50px; top:0; border-radius:9px 9px 0 0; }
-  #dDown{ left:50px; bottom:0; border-radius:0 0 9px 9px; }
-  #dLeft{ left:0; top:50px; border-radius:9px 0 0 9px; }
-  #dRight{ right:0; top:50px; border-radius:0 9px 9px 0; }
-  .dcenter2{ position:absolute; left:50px; top:50px; width:50px; height:50px; background:#2a2350; }
-  .dbtn.pressed{ transform:translateY(2px); box-shadow:0 1px 0 #14102a; filter:brightness(1.35); }
-  #abtns{ position:fixed; z-index:9; right:max(14px,env(safe-area-inset-right)); bottom:max(14px,env(safe-area-inset-bottom)); width:210px; height:185px; }
+  #dUp{ left:36px; top:0; border-radius:8px 8px 0 0; }
+  #dDown{ left:36px; bottom:0; border-radius:0 0 8px 8px; }
+  #dLeft{ left:0; top:36px; border-radius:8px 0 0 8px; }
+  #dRight{ right:0; top:36px; border-radius:0 8px 8px 0; }
+  .dcenter2{ position:absolute; left:36px; top:36px; width:36px; height:36px; background:#2a2350; }
+  .dbtn.pressed{ transform:translateY(2px); box-shadow:0 1px 0 #14102a; filter:brightness(1.4); }
+  #abtns{ position:fixed; z-index:9; right:max(10px,env(safe-area-inset-right)); bottom:max(10px,env(safe-area-inset-bottom)); width:150px; height:140px; opacity:.85; }
   .rbtn{ position:absolute; border:none; border-radius:50%; font-weight:900; color:#fff; pointer-events:auto; touch-action:none; -webkit-user-select:none; user-select:none; display:flex; align-items:center; justify-content:center; }
-  .bA{ width:76px; height:76px; right:8px; bottom:8px; font-size:30px; background:radial-gradient(circle at 35% 30%,#e2607a,#9d2235); box-shadow:0 5px 0 #6e1825, inset 0 2px 4px rgba(255,255,255,.35); }
-  .bB{ width:66px; height:66px; right:88px; bottom:54px; font-size:26px; background:radial-gradient(circle at 35% 30%,#54b39a,#2e6e5e); box-shadow:0 5px 0 #1d4a3f, inset 0 2px 4px rgba(255,255,255,.35); }
-  .bJump{ width:54px; height:54px; right:20px; bottom:100px; font-size:22px; background:radial-gradient(circle at 35% 30%,#e8c45f,#b8860b); box-shadow:0 4px 0 #7e5e08, inset 0 2px 4px rgba(255,255,255,.3); }
-  .bGrab{ width:48px; height:48px; right:100px; bottom:124px; font-size:18px; background:radial-gradient(circle at 35% 30%,#8a93c0,#5d6575); box-shadow:0 4px 0 #3d4252, inset 0 2px 4px rgba(255,255,255,.3); }
-  .rbtn.pressed{ transform:translateY(3px); filter:brightness(1.25); }
+  .bA{ width:58px; height:58px; right:6px; bottom:6px; font-size:24px; background:radial-gradient(circle at 35% 30%,#e2607a,#9d2235); box-shadow:0 4px 0 #6e1825, inset 0 2px 4px rgba(255,255,255,.35); }
+  .bB{ width:50px; height:50px; right:64px; bottom:42px; font-size:21px; background:radial-gradient(circle at 35% 30%,#54b39a,#2e6e5e); box-shadow:0 4px 0 #1d4a3f, inset 0 2px 4px rgba(255,255,255,.35); }
+  .bJump{ width:42px; height:42px; right:16px; bottom:74px; font-size:18px; background:radial-gradient(circle at 35% 30%,#e8c45f,#b8860b); box-shadow:0 3px 0 #7e5e08, inset 0 2px 4px rgba(255,255,255,.3); }
+  .bGrab{ width:38px; height:38px; right:74px; bottom:92px; font-size:15px; background:radial-gradient(circle at 35% 30%,#8a93c0,#5d6575); box-shadow:0 3px 0 #3d4252, inset 0 2px 4px rgba(255,255,255,.3); }
+  .rbtn.pressed{ transform:translateY(3px); filter:brightness(1.3); }
+
+  /* ===================== MENÚ GALAXIA (estilo Melee) ===================== */
+  #title{ background:
+      radial-gradient(120% 90% at 20% 10%, rgba(108,63,170,.42), transparent 55%),
+      radial-gradient(120% 90% at 85% 80%, rgba(34,94,168,.40), transparent 55%),
+      radial-gradient(80% 70% at 60% 40%, rgba(201,72,120,.18), transparent 60%),
+      linear-gradient(180deg,#04030f 0%, #0a0824 45%, #0d0b2e 100%); }
+  #stars{ position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+  #title .panel{ position:relative; z-index:2; background:rgba(14,16,42,.62);
+      border:1px solid rgba(150,170,255,.30); box-shadow:0 0 50px rgba(80,110,255,.25), inset 0 0 30px rgba(60,80,200,.12);
+      backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); color:#e8ecff; }
+  #title .panel p{ color:#b9c2ee; }
+  #title .panel h2{ color:#cfd8ff; }
+  .galaxy-title{ font-size:clamp(30px,7vw,52px); font-weight:900; letter-spacing:2px; line-height:.95;
+      background:linear-gradient(180deg,#fff 0%,#ffe9a8 38%,#ffb347 70%,#ff7b54 100%);
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+      filter:drop-shadow(0 0 14px rgba(255,180,90,.55)); margin-bottom:2px; animation:titlePulse 3.4s ease-in-out infinite; }
+  @keyframes titlePulse{ 0%,100%{ filter:drop-shadow(0 0 12px rgba(255,180,90,.45)); } 50%{ filter:drop-shadow(0 0 26px rgba(255,200,120,.85)); } }
+  .galaxy-sub{ color:#9fb0ff !important; font-size:15px; letter-spacing:3px; }
+  .btn.spirit{ background:linear-gradient(180deg,#7b3ff2,#5a23c8); box-shadow:0 4px 0 #3c1d8a; }
+  .coinpill{ display:inline-flex; align-items:center; gap:5px; background:rgba(0,0,0,.35); border:1px solid rgba(255,215,120,.5);
+      color:#ffd86b; font-weight:800; border-radius:999px; padding:5px 12px; font-size:15px; }
+  .firepill{ display:inline-flex; align-items:center; gap:4px; background:rgba(0,0,0,.35); border:1px solid rgba(255,140,40,.6);
+      color:#ff9a3c; font-weight:800; border-radius:999px; padding:5px 11px; font-size:15px; }
+  .firepill.lit{ animation:fireGlow 1.4s ease-in-out infinite; }
+  @keyframes fireGlow{ 0%,100%{ box-shadow:0 0 6px rgba(255,120,30,.4); } 50%{ box-shadow:0 0 16px rgba(255,140,40,.9); } }
+  .daily-teaser{ display:flex; align-items:center; gap:10px; width:100%; margin:4px 0 12px; padding:10px 12px;
+      background:linear-gradient(120deg,#3a2a05,#e8b923,#3a2a05); background-size:220% 100%; animation:dtShine 3s linear infinite;
+      border:1px solid rgba(255,216,107,.75); border-radius:14px; cursor:pointer; text-align:left;
+      box-shadow:0 0 18px rgba(255,200,80,.4); }
+  @keyframes dtShine{ 0%{ background-position:0% 0; } 100%{ background-position:220% 0; } }
+  .daily-teaser .dt-icon{ font-size:26px; filter:drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+  .daily-teaser .dt-txt{ display:flex; flex-direction:column; flex:1; line-height:1.15; }
+  .daily-teaser .dt-txt b{ font-size:14px; color:#241900; letter-spacing:.3px; }
+  .daily-teaser .dt-sub{ font-size:11px; color:#4a3a0d; }
+  .daily-teaser .dt-badge{ min-width:22px; height:22px; padding:0 6px; border-radius:999px; background:#e02424; color:#fff;
+      font-weight:900; font-size:12px; display:flex; align-items:center; justify-content:center; box-shadow:0 0 8px rgba(224,36,36,.7); animation:dtPulse 1.2s ease-in-out infinite; }
+  @keyframes dtPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.2); } }
+  .daily-teaser.done{ filter:saturate(.75); }
+  .daily-teaser.done .dt-badge{ background:#2e7d4f; animation:none; }
+
+  /* ===================== HUB DE ESPÍRITUS ===================== */
+  #spirits .panel{ max-width:760px; width:94%; max-height:90vh; overflow:hidden; display:flex; flex-direction:column;
+      background:#100f24; border:1px solid rgba(150,170,255,.28); color:#e8ecff; }
+  #spirits h2{ color:#fff; }
+  .sp-top{ display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  .sp-tabs{ display:flex; gap:6px; }
+  .sp-tab{ background:#23204a; color:#bcc6ff; border:none; border-radius:10px 10px 0 0; padding:8px 14px; font-weight:800; font-size:14px; cursor:pointer; }
+  .sp-tab.on{ background:#3a2f7a; color:#fff; box-shadow:inset 0 -3px 0 #ffd86b; }
+  .sp-body{ overflow-y:auto; -webkit-overflow-scrolling:touch; padding:4px; flex:1; }
+  .sp-progress{ font-size:12px; color:#9fb0ff; margin:2px 0 8px; }
+  .sp-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:8px; }
+  @media (max-width:540px){ .sp-grid{ grid-template-columns:repeat(auto-fill,minmax(64px,1fr)); } }
+  .sp-cell{ border-radius:12px; padding:8px 3px 6px; text-align:center; cursor:pointer; background:#1b1940; border:2px solid #2c2a55; position:relative; transition:transform .1s; }
+  .sp-cell:active{ transform:scale(.94); }
+  .sp-cell .se{ font-size:30px; line-height:1.1; display:block; }
+  .sp-cell .sn{ font-size:10px; font-weight:700; color:#cfd6ff; display:block; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sp-cell.locked .se{ filter:brightness(0) saturate(0); opacity:.45; }
+  .sp-cell.locked .sn{ color:#6b6a90; }
+  .sp-cell .rgem{ position:absolute; top:3px; right:4px; width:9px; height:9px; border-radius:50%; box-shadow:0 0 5px currentColor; }
+  /* rarezas */
+  .r-comun{ --rc:#9aa0ad; } .r-uncommon{ --rc:#3fc46b; } .r-rare{ --rc:#3b82f6; }
+  .r-epic{ --rc:#b15cff; } .r-legendario{ --rc:#ffb01f; } .r-mistico{ --rc:#ff4d8d; }
+  .sp-cell.owned{ border-color:var(--rc); box-shadow:0 0 10px -2px var(--rc); }
+  .sp-cell .rgem{ color:var(--rc); background:var(--rc); }
+  .r-mistico.owned{ animation:misticGlow 2s linear infinite; }
+  @keyframes misticGlow{ 0%{ box-shadow:0 0 8px #ff4d8d; } 33%{ box-shadow:0 0 12px #b15cff; } 66%{ box-shadow:0 0 12px #3b82f6; } 100%{ box-shadow:0 0 8px #ff4d8d; } }
+
+  /* detalle de espíritu */
+  #spDetail{ position:fixed; inset:0; z-index:60; display:none; align-items:center; justify-content:center; background:rgba(4,3,15,.78); padding:18px; }
+  #spDetail.show{ display:flex; }
+  .spd-card{ background:#15132f; border:2px solid var(--rc,#444); border-radius:16px; max-width:380px; width:100%; padding:22px 20px; text-align:center; color:#e8ecff; box-shadow:0 0 40px -8px var(--rc,#000); }
+  .spd-emoji{ font-size:74px; line-height:1; filter:drop-shadow(0 6px 12px rgba(0,0,0,.5)); }
+  .spd-emoji.locked{ filter:brightness(0) saturate(0); opacity:.4; }
+  .spd-name{ font-size:22px; font-weight:900; margin:8px 0 2px; }
+  .spd-rar{ display:inline-block; font-size:11px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#fff; background:var(--rc,#555); border-radius:999px; padding:3px 12px; }
+  .spd-cat{ font-size:12px; color:#9fb0ff; margin:6px 0; }
+  .spd-desc{ font-size:14px; color:#d6dcff; line-height:1.5; margin:10px 0; }
+  .spd-how{ font-size:13px; color:#ffd86b; background:rgba(255,216,107,.10); border:1px dashed rgba(255,216,107,.4); border-radius:10px; padding:8px 10px; margin-top:6px; }
+
+  /* máquina de lotería */
+  .lotto{ text-align:center; padding:6px 2px 16px; }
+  .lotto-machine{ font-size:64px; line-height:1; margin:6px 0; animation:floaty 3s ease-in-out infinite; }
+  @keyframes floaty{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
+  .lotto-slot{ height:120px; display:flex; align-items:center; justify-content:center; background:#0b0a1f; border:2px solid #2c2a55; border-radius:14px; margin:10px auto; max-width:300px; overflow:hidden; }
+  .lotto-slot .se{ font-size:70px; }
+  .lotto-bet{ display:flex; align-items:center; justify-content:center; gap:12px; margin:12px 0 6px; }
+  .lotto-bet input{ width:62%; }
+  .betval{ font-weight:900; color:#ffd86b; font-size:20px; min-width:64px; }
+  .betval small{ font-size:12px; color:#9fb0ff; }
+  .lotto-hint{ font-size:12px; color:#9fb0ff; margin-top:4px; }
+
+  /* toast / popups */
+  #spToast{ position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(140%); z-index:70;
+      background:linear-gradient(180deg,#3a2f7a,#1d1748); border:1px solid rgba(255,216,107,.55); color:#fff;
+      border-radius:14px; padding:12px 18px; display:flex; align-items:center; gap:12px; box-shadow:0 8px 30px rgba(0,0,0,.5);
+      transition:transform .45s cubic-bezier(.2,1.3,.4,1); cursor:pointer; max-width:90vw; }
+  #spToast.show{ transform:translateX(-50%) translateY(0); }
+  #spToast .te{ font-size:34px; }
+  #spToast .tt b{ color:#ffd86b; }
+  #spToast .tt small{ display:block; color:#bcc6ff; font-size:11px; }
+  #daily .panel{ background:#15132f; border:1px solid rgba(255,216,107,.4); color:#e8ecff; max-width:420px; }
+  #daily h1{ color:#ffd86b; }
+  .streak{ display:flex; gap:5px; justify-content:center; margin:12px 0; }
+  .streak .d{ flex:1; max-width:40px; aspect-ratio:1; border-radius:9px; background:#23204a; display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:10px; color:#8a90c0; border:1px solid #2c2a55; }
+  .streak .d.got{ background:#2e7d4f; color:#fff; border-color:#3fc46b; }
+  .streak .d.today{ background:#ffd86b; color:#3a2a00; font-weight:900; border-color:#fff; box-shadow:0 0 12px rgba(255,216,107,.7); }
+  .streak .d b{ font-size:13px; }
+
+  /* ===================== CARTAS TCG (estilo álbum coleccionable) ===================== */
+  .spd-host{ background:none !important; border:none !important; box-shadow:none !important; padding:0 !important; width:min(300px,82vw); max-width:300px; }
+  .tcg{ position:relative; width:100%; aspect-ratio:63/88; border-radius:14px; padding:7px; box-shadow:0 10px 26px rgba(0,0,0,.5); overflow:hidden; }
+  .tcg-inner{ position:relative; height:100%; border-radius:9px; background:#171430; display:flex; flex-direction:column; padding:8px; gap:6px; z-index:2; }
+  .tcg-top{ display:flex; justify-content:space-between; align-items:baseline; gap:6px; }
+  .tcg-name{ font-weight:900; font-size:15px; color:#fff; text-shadow:0 1px 3px #000; line-height:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .tcg-hp{ font-weight:900; font-size:12px; color:#ffd86b; white-space:nowrap; }
+  .tcg-art{ position:relative; flex:1; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; border:2px solid rgba(255,255,255,.28); }
+  .tcg-emoji{ font-size:80px; line-height:1; filter:drop-shadow(0 6px 12px rgba(0,0,0,.55)); z-index:1; }
+  .tcg-type{ font-size:10px; font-weight:800; color:#dbe2ff; background:rgba(0,0,0,.35); border-radius:6px; padding:3px 7px; text-align:center; }
+  .tcg-desc{ font-size:10px; line-height:1.4; color:#eef0ff; background:rgba(255,255,255,.08); border-radius:6px; padding:6px 7px; flex-basis:auto; overflow:hidden; }
+  .tcg-foot{ display:flex; justify-content:space-between; font-size:9px; font-weight:800; color:#aab2e0; letter-spacing:.5px; }
+  /* marcos por rareza */
+  .r-comun.tcg{ background:linear-gradient(135deg,#eef2f7,#aab4c2,#7d8896); }
+  .r-uncommon.tcg{ background:linear-gradient(135deg,#c6f5d2,#4fc46b,#2c8d4f); }
+  .r-rare.tcg{ background:linear-gradient(135deg,#c2dcff,#4f8ef0,#2b5fb0); }
+  .r-epic.tcg{ background:linear-gradient(135deg,#e9caff,#b15cff,#7a2bd0); }
+  .r-legendario.tcg{ background:linear-gradient(135deg,#ffeaa8,#f6c33f,#c79a24); }
+  .r-mistico.tcg{ background:linear-gradient(135deg,#ff9ad1,#b15cff,#5cc8ff,#ffd86b); background-size:300% 300%; animation:misticBorder 4s ease infinite; }
+  @keyframes misticBorder{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  /* brillo holográfico (epic+) */
+  .tcg.holo .tcg-art::before{ content:''; position:absolute; inset:-60%; z-index:2;
+    background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.55) 50%,transparent 62%);
+    animation:tcgSheen 3.6s ease-in-out infinite; mix-blend-mode:overlay; pointer-events:none; }
+  @keyframes tcgSheen{ 0%,100%{ transform:translateX(-55%) } 50%{ transform:translateX(55%) } }
+  .tcg.holo.r-mistico .tcg-art{ background-image:none; }
+  /* bloqueada */
+  .tcg.locked .tcg-emoji{ filter:brightness(0) saturate(0); opacity:.32; }
+  .tcg.locked .tcg-name{ color:#8a90c0; }
+  .tcg.locked .tcg-desc{ color:#ffd86b; }
+  .tcg-rarbadge{ font-size:9px; font-weight:900; letter-spacing:.5px; text-transform:uppercase; color:#fff; background:var(--rc,#666); border-radius:999px; padding:2px 8px; white-space:nowrap; box-shadow:0 0 8px -1px var(--rc); }
+  /* espíritus oscuros: tono más oscuro */
+  .tcg.dark .tcg-art{ filter:brightness(.45) saturate(.6); }
+  .tcg.dark .tcg-art::after{ content:''; position:absolute; inset:0; z-index:1; background:radial-gradient(circle at 50% 40%, rgba(0,0,0,.15), rgba(0,0,0,.7)); }
+  .tcg.dark .tcg-emoji{ filter:drop-shadow(0 0 6px #000) brightness(.65) contrast(1.1); }
+  .sp-cell.dark.owned .se{ filter:brightness(.5) saturate(.6); }
+  /* retos diarios / mensuales */
+  .chal-month{ background:#15132f; border:1px solid rgba(255,216,107,.4); border-radius:12px; padding:12px; margin-bottom:12px; }
+  .chal-mtop{ display:flex; justify-content:space-between; font-weight:800; font-size:14px; color:#ffd86b; }
+  .chal-bar{ height:12px; background:#0b0a1f; border-radius:999px; overflow:hidden; margin:8px 0; border:1px solid #2c2a55; }
+  .chal-bar i{ display:block; height:100%; background:linear-gradient(90deg,#f6c33f,#ffe9a8); transition:width .4s; }
+  .chal-prize{ font-size:13px; color:#cdb9d6; cursor:pointer; }
+  .chal-prize.got{ color:#ffd86b; font-weight:800; }
+  .chal-h{ color:#cfd6ff; font-size:14px; margin:6px 0 8px; }
+  .chal-item{ display:flex; justify-content:space-between; align-items:center; background:#1b1940; border:1px solid #2c2a55; border-radius:10px; padding:10px 12px; margin-bottom:8px; font-size:13px; color:#e8ecff; }
+  .chal-item.done{ border-color:#3fc46b; background:#16321f; }
+  .chal-item .ci-p{ font-weight:800; color:#9fb0ff; }
+  .chal-note{ font-size:11px; color:#9fb0ff; margin-top:6px; line-height:1.4; }
+  /* tienda */
+  .sp-tabs{ flex-wrap:wrap; }
+  .shop-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; color:#cfd6ff; font-weight:800; font-size:14px; }
+  .shop-ref{ background:#23204a; color:#ffd86b; border:1px solid #46324a; border-radius:10px; padding:6px 10px; font-weight:800; font-size:12px; cursor:pointer; }
+  .shop-list{ display:flex; flex-direction:column; gap:8px; }
+  .shop-item{ display:flex; align-items:center; gap:10px; background:#1b1940; border:2px solid var(--rc,#2c2a55); border-radius:12px; padding:8px 10px; box-shadow:0 0 10px -4px var(--rc); }
+  .shop-item.sold{ opacity:.5; }
+  .shop-em{ font-size:34px; cursor:pointer; flex-shrink:0; }
+  .shop-info{ display:flex; flex-direction:column; flex:1; min-width:0; }
+  .shop-info b{ color:#fff; font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .shop-rar{ font-size:10px; color:#9fb0ff; }
+  .shop-buy{ background:linear-gradient(180deg,#f6c33f,#caa12f); color:#241900; border:none; border-radius:10px; padding:8px 12px; font-weight:900; font-size:13px; cursor:pointer; white-space:nowrap; min-width:60px; }
+  .shop-buy:disabled{ background:#2e7d4f; color:#fff; cursor:default; }
+  .shop-note{ font-size:11px; color:#9fb0ff; margin-top:10px; line-height:1.4; }
+
+  /* ===================== SELECCIÓN ESTILO MORTAL KOMBAT ===================== */
+  #select .panel{ background:#0d0b1e; border:1px solid rgba(255,80,80,.35); color:#f3e9e9;
+     box-shadow:0 0 50px rgba(255,40,40,.18), inset 0 0 30px rgba(120,20,20,.15); max-width:720px; }
+  #select h2{ color:#ff5a5a; text-transform:uppercase; letter-spacing:2px; text-shadow:0 0 10px rgba(255,60,60,.5); }
+  #select p, #selInfo{ color:#c9c2d6; }
+  .grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin:10px 0; }
+  @media (max-width:640px){ .grid{ grid-template-columns:repeat(4,1fr); } }
+  .cell{ position:relative; padding:0; border:2px solid #46324a; border-radius:8px; overflow:hidden;
+     aspect-ratio:3/4; background:#16121f; cursor:pointer; transition:transform .08s, box-shadow .12s; }
+  .cell .porbg{ position:absolute; inset:0; opacity:.9; }
+  .cell .por{ position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:bottom center; filter:drop-shadow(0 4px 6px rgba(0,0,0,.5)); }
+  .cell .fallback{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:42px; filter:drop-shadow(0 3px 5px rgba(0,0,0,.5)); }
+  .cell .nm{ position:absolute; left:0; right:0; bottom:0; font-size:9.5px; font-weight:800; color:#fff;
+     background:linear-gradient(transparent,rgba(0,0,0,.88)); padding:9px 2px 3px; text-transform:uppercase; letter-spacing:.5px; }
+  .cell.sel{ border-color:#ff3030; box-shadow:0 0 16px #ff3030, inset 0 0 14px rgba(255,40,40,.3); transform:scale(1.06); z-index:2; }
+  .cell.cpu{ border-color:#36c8ff; box-shadow:0 0 16px #36c8ff, inset 0 0 14px rgba(50,180,255,.3); z-index:2; }
+  .cell.sel.cpu{ border-color:#d36bff; box-shadow:0 0 16px #d36bff; }
+  /* selector de dificultad */
+  #diffRow{ display:flex; gap:8px; justify-content:center; margin:8px 0 4px; }
+  .diffb{ flex:1; max-width:130px; background:#211a33; color:#c9c2d6; border:2px solid #46324a; border-radius:10px;
+     padding:9px 6px; font-weight:800; font-size:13px; cursor:pointer; }
+  .diffb.on{ background:#7a1020; color:#fff; border-color:#ff3030; box-shadow:0 0 12px rgba(255,50,50,.5); }
+  .diffb small{ display:block; font-size:9px; font-weight:600; opacity:.8; }
+  #diffLabel{ font-size:12px; color:#ff9a9a; margin-top:2px; }
+
+  /* ===================== MODO TORRES ===================== */
+  #towers .panel{ background:#0d0b1e; border:1px solid rgba(255,180,80,.4); color:#f3e9e9; max-width:680px; width:94%; }
+  #towers h2{ color:#ffd86b; text-transform:uppercase; letter-spacing:2px; text-shadow:0 0 10px rgba(255,200,80,.4); }
+  .twr-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:12px 0; }
+  @media (max-width:520px){ .twr-grid{ grid-template-columns:1fr; } }
+  .twr{ position:relative; text-align:left; border-radius:14px; padding:14px 14px 12px; cursor:pointer; overflow:hidden;
+     border:2px solid; transition:transform .1s; }
+  .twr:active{ transform:scale(.98); }
+  .twr .tn{ font-weight:900; font-size:17px; display:flex; align-items:center; gap:8px; }
+  .twr .td{ font-size:12px; opacity:.92; margin-top:4px; }
+  .twr .stars{ font-size:13px; letter-spacing:2px; margin-top:6px; }
+  .twr .done{ position:absolute; top:10px; right:12px; font-size:20px; }
+  .twr.bronce{ border-color:#c97b3a; background:linear-gradient(150deg,#3a2410,#1b1208); }
+  .twr.plata{ border-color:#b9c2d0; background:linear-gradient(150deg,#2a3340,#13181f); }
+  .twr.oro{ border-color:#ffcf4d; background:linear-gradient(150deg,#4a3810,#1f1808); }
+  .twr.leyenda{ border-color:#d36bff; background:linear-gradient(150deg,#2e1340,#140820); }
+  .twr-ladder{ font-size:12px; color:#cdb9d6; margin-top:6px; display:flex; gap:4px; flex-wrap:wrap; justify-content:center; }
+  .twr-step{ width:26px; height:26px; border-radius:6px; background:#211a33; border:1px solid #46324a; display:flex; align-items:center; justify-content:center; font-size:13px; }
+  .twr-step.done2{ background:#2e7d4f; border-color:#3fc46b; }
+  .twr-step.now{ background:#ffd86b; color:#3a2a00; border-color:#fff; box-shadow:0 0 8px rgba(255,216,107,.7); }
 </style>
 </head>
 <body>
@@ -191,19 +408,80 @@
 <div id="rotate" class="overlay"><div>🔄<br><br>Gira tu dispositivo<br><small>Zodiac Fighters se juega en horizontal</small></div></div>
 
 <div id="title" class="overlay">
+  <canvas id="stars"></canvas>
   <div class="panel">
-    <h1>Zodiac Fighters</h1>
-    <h2>Los 12 del Zodiaco · 生肖</h2>
+    <div style="position:absolute;top:10px;right:12px;display:flex;gap:6px"><span class="firepill" id="fireTop">🔥 0</span><span class="coinpill" id="coinTop">🪙 0</span></div>
+    <h1 class="galaxy-title">ZODIAC FIGHTERS</h1>
+    <h2 class="galaxy-sub">Los 12 del Zodiaco</h2>
+    <button id="dailyTeaser" class="daily-teaser">
+      <span class="dt-icon">🗓️</span>
+      <span class="dt-txt"><b>Misión del día</b><span class="dt-sub">¡Descubre el desafío de hoy!</span></span>
+      <span class="dt-badge">!</span>
+    </button>
     <p>Peleas 1v1 con barra de vida. Sin caídas: ¡rebota a tu rival contra los bordes del escenario de papel!</p>
-    <p><b>Stick</b> = moverte · sostener <b>atrás</b> = bloquear · <b>A</b> = golpe (mantén = smash) · <b>B</b> = especial · <b>B+↑</b> = recovery · <b>✊</b> = agarre</p>
-    <p style="font-size:12px;color:#8a93a6">En PC: <b>flechas</b> = moverse · <b>A</b> = golpe (mantén = smash) · <b>S</b> = especial · <b>X</b> = agarre · <b>↑/Espacio</b> = saltar</p>
+    <p style="font-size:12px;color:#8a93a6">Stick = moverte · atrás = bloquear · A = golpe (mantén = smash) · B = especial · B+↑ = recovery · ✊ = agarre</p>
     <button class="btn" id="modeFight">⚔️ Pelea vs CPU</button>
+    <button class="btn alt" id="modeTowers">🏯 Torres</button>
     <button class="btn alt" id="modeTarget">🎯 Target Test</button>
+    <button class="btn spirit" id="modeSpirits">✨ Espíritus</button>
     <button class="btn alt" id="fs">⛶ Pantalla completa</button>
     <button class="btn alt hidden" id="install">⬇️ Instalar app</button>
     <p id="iosHint" class="hidden" style="font-size:12px;color:#9d2235">En iPhone: toca el botón <b>Compartir</b> ⬆️ de Safari y elige <b>"Agregar a pantalla de inicio"</b>. Ábrelo desde ese ícono y se verá a pantalla completa.</p>
+    <p id="playTime" style="font-size:11px;color:#7c84b8;margin-top:6px"></p>
   </div>
 </div>
+
+<!-- ===== HUB DE ESPÍRITUS ===== -->
+<div id="spirits" class="overlay hidden">
+  <div class="panel">
+    <div class="sp-top">
+      <div class="sp-tabs">
+        <button class="sp-tab on" id="tabAlbum">📖 Álbum</button>
+        <button class="sp-tab" id="tabLotto">🎰 Máquina</button>
+        <button class="sp-tab" id="tabReto">🗓️ Misiones</button>
+        <button class="sp-tab" id="tabShop">🛒 Tienda</button>
+      </div>
+      <span style="display:flex;gap:6px"><span class="firepill" id="fireHub">🔥 0</span><span class="coinpill" id="coinHub">🪙 0</span></span>
+    </div>
+    <div class="sp-progress" id="spProg"></div>
+    <div class="sp-progress" id="playTimeHub" style="color:#9fb0ff;margin-top:-4px"></div>
+    <div class="sp-body">
+      <div id="albumView"><div class="sp-grid" id="spGrid"></div></div>
+      <div id="lottoView" style="display:none">
+        <div class="lotto">
+          <div class="lotto-machine">🎰</div>
+          <div class="lotto-slot"><span class="se" id="lottoFace">❔</span></div>
+          <div class="lotto-bet">
+            <span>Apuesta</span>
+            <input type="range" id="betRange" min="1" max="20" value="1">
+            <span class="betval"><span id="betNum">1</span> 🪙<br><small id="betTier">común+</small></span>
+          </div>
+          <button class="btn spirit" id="spinBtn">🎲 ¡Girar!</button>
+          <div class="lotto-hint">Entre más monedas apuestes, mayor probabilidad de rarezas altas (común → uncommon → rare → epic → legendario → místico). Solo salen espíritus que aún no tienes.</div>
+        </div>
+      </div>
+      <div id="chalView" style="display:none"></div>
+      <div id="shopView" style="display:none"></div>
+    </div>
+    <button class="btn ghost" id="spClose" style="margin-top:10px">‹ Menú</button>
+  </div>
+</div>
+
+<!-- detalle de un espíritu -->
+<div id="spDetail"><div class="spd-card" id="spdCard"></div></div>
+
+<!-- recompensa diaria -->
+<div id="daily" class="overlay hidden">
+  <div class="panel">
+    <h1>🎁 Recompensa diaria</h1>
+    <p id="dailyText"></p>
+    <div class="streak" id="streakRow"></div>
+    <button class="btn spirit" id="dailyOk">¡Genial!</button>
+  </div>
+</div>
+
+<!-- toast de desbloqueo -->
+<div id="spToast"><span class="te">✨</span><div class="tt"></div></div>
 
 <div id="iosBanner" class="hidden">
   <button id="iosClose">✕</button>
@@ -216,10 +494,26 @@
     <h2 id="selTitle">Elige tu peleador</h2>
     <div class="grid" id="grid"></div>
     <p id="selInfo">Toca un animal para ver su estilo.</p>
+    <div id="diffRow">
+      <button class="diffb" data-d="1">Fácil<small>CPU lenta</small></button>
+      <button class="diffb on" data-d="2">Normal<small>equilibrada</small></button>
+      <button class="diffb" data-d="3">Difícil<small>implacable</small></button>
+    </div>
     <button class="btn" id="fightBtn" disabled style="opacity:.5">¡Pelear!</button>
     <button class="btn ghost" id="randBtn">CPU al azar</button>
     <button class="btn alt" id="targetBtn" disabled style="opacity:.5">🎯 ¡Empezar!</button>
+    <button class="btn" id="towerStartBtn" disabled style="opacity:.5;display:none">🏯 ¡Comenzar Torre!</button>
     <button class="btn ghost" id="backMenu">‹ Menú</button>
+  </div>
+</div>
+
+<!-- ===== SELECCIÓN DE TORRE ===== -->
+<div id="towers" class="overlay hidden">
+  <div class="panel">
+    <h2>🏯 Torres</h2>
+    <p style="font-size:13px;color:#c9c2d6">Sube cada torre derrotando rivales. La CPU se vuelve más dura a cada paso; al final espera el jefe. Completa una torre para ganar su espíritu + 2 🪙.</p>
+    <div class="twr-grid" id="twrGrid"></div>
+    <button class="btn ghost" id="towersBack">‹ Menú</button>
   </div>
 </div>
 
@@ -235,23 +529,28 @@
   <div class="panel">
     <h1 id="endTitle">¡K.O.!</h1>
     <p id="endText"></p>
+    <div id="endUnlock" class="hidden" style="background:rgba(123,63,242,.15);border:1px dashed rgba(150,170,255,.5);border-radius:12px;padding:10px;margin:6px 0">
+      <p id="endUnlockText" style="margin:0 0 8px;color:#5a23c8"></p>
+      <button class="btn spirit" id="endSeeSpirit" style="padding:8px 16px;font-size:14px">✨ Ver espíritu</button>
+    </div>
     <button class="btn" id="rematch">Revancha</button>
     <button class="btn alt" id="changeChar">Cambiar peleador</button>
   </div>
 </div>
 
+<script src="spirits-data.js"></script>
 <script>
 "use strict";
 /* ============ ZODIAC FIGHTERS v0.1 — peleas 1v1 estilo papel ============ */
 const cv = document.getElementById('game'), cx = cv.getContext('2d');
-let W=0,H=0,GY=0,S=1;
+let W=0,H=0,GY=0,S=1,groundFrac=0.80;
 function resize(){
   const dpr=Math.min(window.devicePixelRatio||1,2);
   const vv=window.visualViewport;
   W=Math.round(vv?vv.width:innerWidth); H=Math.round(vv?vv.height:innerHeight);
   cv.style.width=W+'px'; cv.style.height=H+'px';
   cv.width=W*dpr; cv.height=H*dpr; cx.setTransform(dpr,0,0,dpr,0,0);
-  S=Math.max(.72,Math.min(1.35,H/430)); GY=H*0.80;
+  S=Math.max(.72,Math.min(1.35,H/430)); GY=H*groundFrac;
 }
 addEventListener('resize',resize); addEventListener('orientationchange',()=>setTimeout(resize,250));
 if(window.visualViewport){ visualViewport.addEventListener('resize',resize); visualViewport.addEventListener('scroll',resize); }
@@ -746,20 +1045,31 @@ function updateProjectiles(dt){
 }
 
 /* ============ IA DE LA CPU ============ */
+/* dificultad de la CPU: 0.6 (muy fácil) … 3.6 (brutal). Botones: 1=Fácil,2=Normal,3=Difícil. */
+let CPU_D=2;
+function diffParams(d){
+  const t=Math.max(0,Math.min(1,(d-0.6)/3.0)); const L=(a,b)=>a+(b-a)*t;
+  return { react:L(.60,.07), reactJ:L(.30,.10), block:L(.05,.60), atkMul:L(2.0,.5),
+           mistake:L(.42,0), smash:L(.10,.34), recov:L(.04,.9) };
+}
 function aiInput(c,dt){
   const ai=c.ai, foe=c.foe, dist=Math.abs(foe.x-c.x), toFoe=Math.sign(foe.x-c.x)||1;
+  const P=diffParams(CPU_D);
   ai.t-=dt; ai.atkCd-=dt;
   const inp={dx:0,dy:0,a:false,b:false,g:false,j:false};
   if(ai.t<=0){
-    ai.t=.18+Math.random()*.3;
+    ai.t=P.react+Math.random()*P.reactJ;
     const r=Math.random();
-    if(foe.state==='atk'&&dist<120*S&&r<.3) ai.act='block';
+    if(Math.random()<P.mistake){ ai.act = Math.random()<.5?'idle':'approach'; }
+    else if(foe.state==='atk'&&dist<120*S&&r<P.block) ai.act='block';
     else if(dist>150*S) ai.act = (c.ch.proj&&r<.35)?'proj' : (r<.15?'dashSp':'approach');
-    else if(dist<80*S&&ai.atkCd<=0) ai.act = r<.3?'jab' : r<.5?'tilt' : r<.62?'smash' : r<.72?'grab' : r<.85?'special' : 'jumpAtk';
+    else if(dist<80*S&&ai.atkCd<=0){ const sm=P.smash;
+      ai.act = r<.30?'jab' : r<.50?'tilt' : r<(.50+sm)?'smash' : r<(.62+sm)?'grab' : r<(.85+sm*.3)?'special' : 'jumpAtk'; }
     else if(dist<150*S) ai.act = r<.6?'approach' : r<.8?'jumpAtk' : 'special';
     else ai.act='approach';
   }
   switch(ai.act){
+    case 'idle': if(Math.random()<.3) inp.dx=-toFoe*.4; break;
     case 'approach': inp.dx=toFoe*.9; break;
     case 'block': inp.dx=-toFoe*.8; break;
     case 'proj': if(c.state==='ctl'){ inp.b=true; ai.act='approach'; } break;
@@ -768,16 +1078,16 @@ function aiInput(c,dt){
     case 'tilt': if(c.state==='ctl'){ inp.dx=toFoe; inp.a=true; ai.aRel=.08; ai.act='rel'; } break;
     case 'smash': if(c.state==='ctl'){ inp.dx=toFoe; inp.a=true; ai.aRel=.42; ai.act='rel'; } break;
     case 'rel': ai.aRel-=dt; inp.a=true; inp.dx=toFoe*.6;
-      if(ai.aRel<=0){ inp.a=false; ai.act='approach'; ai.atkCd=.5+Math.random()*.6; } break;
-    case 'grab': if(c.state==='ctl'){ inp.g=true; ai.act='approach'; ai.atkCd=.7; } break;
-    case 'special': if(c.state==='ctl'){ const rr=Math.random(); if(rr<.5)inp.dx=toFoe; else if(rr<.75)inp.dy=1; inp.b=true; ai.act='approach'; ai.atkCd=.8; } break;
+      if(ai.aRel<=0){ inp.a=false; ai.act='approach'; ai.atkCd=(.5+Math.random()*.6)*P.atkMul; } break;
+    case 'grab': if(c.state==='ctl'){ inp.g=true; ai.act='approach'; ai.atkCd=.7*P.atkMul; } break;
+    case 'special': if(c.state==='ctl'){ const rr=Math.random(); if(rr<.5)inp.dx=toFoe; else if(rr<.75)inp.dy=1; inp.b=true; ai.act='approach'; ai.atkCd=.8*P.atkMul; } break;
     case 'jumpAtk':
       if(c.grounded){ inp.j=true; }
       else if(c.vy>-3*S){ inp.dx=toFoe; inp.a=true; ai.aRel=.07; ai.act='rel'; }
       inp.dx=toFoe*.7; break;
   }
   /* recovery instinto: si está en el aire cayendo y sin saltos */
-  if(!c.grounded&&c.vy>6*S&&c.jumps===0&&!c.recUsed&&Math.random()<.1){ inp.dy=-1; inp.b=true; }
+  if(!c.grounded&&c.vy>6*S&&c.jumps===0&&!c.recUsed&&Math.random()<P.recov){ inp.dy=-1; inp.b=true; }
   return inp;
 }
 
@@ -1046,31 +1356,46 @@ const $=id=>document.getElementById(id);
 const grid=$('grid');
 CHARS.forEach((c,i)=>{
   const d=document.createElement('div'); d.className='cell'; d.dataset.i=i;
-  d.innerHTML=`<span class="em">${c.em}</span><span class="nm">${c.nm}</span>`;
+  d.innerHTML=`<div class="porbg" style="background:linear-gradient(160deg,${c.col2},${c.col})"></div>`
+    +`<img class="por" src="art/${c.id}-ready.png" alt="" onerror="this.style.display='none';this.parentNode.querySelector('.fallback').style.display='flex'">`
+    +`<div class="fallback" style="display:none">${c.em}</div>`
+    +`<div class="nm">${c.nm}</div>`;
   d.onclick=()=>{
-    if(ST.selP===null||ST.selP===i){ ST.selP=i; ST.selC=null; }
-    else ST.selC=i;
+    if(ST.pendingMode==='fight'){
+      if(ST.selP===null||ST.selP===i){ ST.selP=i; ST.selC=null; }
+      else ST.selC=i;
+    } else { ST.selP=i; ST.selC=null; }
     [...grid.children].forEach((el,j)=>{ el.classList.toggle('sel',j===ST.selP); el.classList.toggle('cpu',j===ST.selC); });
     $('selInfo').innerHTML=`<b>${c.nm} ${c.cn}</b> · ${c.arch}<br><small>B: ${c.sp.n.name} · B→: ${c.sp.s.name} · B↓: ${c.sp.d.name}</small>`;
     updateFightBtn();
   };
   grid.appendChild(d);
 });
+ST.cpuDiff=2;
+[...document.querySelectorAll('.diffb')].forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.diffb').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); ST.cpuDiff=+b.dataset.d; });
 function updateFightBtn(){
   const ok=ST.selP!==null;
   $('fightBtn').disabled=!ok; $('fightBtn').style.opacity=ok?1:.5;
   const tb=$('targetBtn'); if(tb){ tb.disabled=!ok; tb.style.opacity=ok?1:.5; }
+  const wb=$('towerStartBtn'); if(wb){ wb.disabled=!ok; wb.style.opacity=ok?1:.5; }
   if(ST.pendingMode==='target')
     $('selTitle').textContent = ST.selP===null?'Elige tu personaje':'¡Listo! Toca 🎯 Empezar';
+  else if(ST.pendingMode==='tower')
+    $('selTitle').textContent = (ST.pendingTower?ST.pendingTower.name+' — ':'')+(ST.selP===null?'Elige tu peleador':'¡Listo! Toca 🏯 Comenzar');
   else
     $('selTitle').textContent = ST.selP===null?'Elige tu peleador': ST.selC===null?'Elige rival CPU (o "CPU al azar")':'¡Listo para pelear!';
 }
 function goFullscreen(){ const el=document.documentElement; const rf=el.requestFullscreen||el.webkitRequestFullscreen; if(rf){ try{ rf.call(el); }catch(e){} } setTimeout(resize,300); }
 const fsSupported=!!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
 $('fs').onclick=()=>{ if(fsSupported){ goFullscreen(); } else { $('iosHint').classList.remove('hidden'); $('fs').classList.add('hidden'); } };
-function applySelectButtons(){ const fight=ST.pendingMode!=='target';
-  $('fightBtn').style.display=fight?'':'none'; $('randBtn').style.display=fight?'':'none';
-  $('targetBtn').style.display=fight?'none':''; }
+function applySelectButtons(){ const m=ST.pendingMode;
+  $('fightBtn').style.display = m==='fight'?'':'none';
+  $('randBtn').style.display = m==='fight'?'':'none';
+  $('diffRow').style.display = m==='fight'?'':'none';
+  $('targetBtn').style.display = m==='target'?'':'none';
+  $('towerStartBtn').style.display = m==='tower'?'':'none'; }
 function openSelect(mode){ ac(); if(fsSupported) goFullscreen();
   ST.pendingMode=mode; ST.selP=null; ST.selC=null;
   [...grid.children].forEach(el=>el.classList.remove('sel','cpu'));
@@ -1126,38 +1451,116 @@ $('fightBtn').onclick=()=>{ if(ST.selP===null) return;
   if(ST.selC===null){ let i; do{ i=Math.floor(Math.random()*12); }while(i===ST.selP); ST.selC=i; }
   startFight(); };
 $('targetBtn').onclick=()=>{ startTarget(); };
-function startFight(){
-  $('select').classList.add('hidden'); $('ending').classList.add('hidden');
-  const c1=CHARS[ST.selP], c2=CHARS[ST.selC];
+function beginFight(c1,c2){
+  $('select').classList.add('hidden'); $('ending').classList.add('hidden'); $('towers').classList.add('hidden');
+  groundFrac=0.80; resize();
   ST.p1=new Fighter(c1,W*.3,1,false); ST.p2=new Fighter(c2,W*.7,-1,true);
   preloadSprites(c1); preloadSprites(c2);
   ST.pal=THEMES[Math.floor(Math.random()*THEMES.length)];
   projectiles=[]; particles=[]; PLATFORMS=[]; targets=[]; ST.fightT=0; hitstopT=0; ST.paused=false;
-  ST.gameMode='fight'; ST.mode='fight'; $('pause').style.display='block';
+  ST.mode='fight'; $('pause').style.display='block';
+  try{ if(window.ZFfire) window.ZFfire(); }catch(e){}
+}
+function startFight(){ CPU_D=ST.cpuDiff||2; ST.gameMode='fight'; beginFight(CHARS[ST.selP],CHARS[ST.selC]); }
+
+/* ===== TORRES (escalera estilo Mortal Kombat) ===== */
+const TOWERS=[
+  {key:'bronce', name:'Torre de Bronce',  em:'🥉', cls:'bronce', len:4,  sd:0.7, ed:1.4, spirit:'tower_bronce',  stars:'★☆☆☆'},
+  {key:'plata',  name:'Torre de Plata',   em:'🥈', cls:'plata',  len:6,  sd:1.1, ed:2.1, spirit:'tower_plata',   stars:'★★☆☆'},
+  {key:'oro',    name:'Torre de Oro',     em:'🥇', cls:'oro',    len:8,  sd:1.6, ed:2.9, spirit:'tower_oro',     stars:'★★★☆'},
+  {key:'leyenda',name:'Torre Legendaria', em:'🏆', cls:'leyenda',len:12, sd:2.2, ed:3.6, spirit:'tower_leyenda', stars:'★★★★'}
+];
+function towerDone(k){ try{ return localStorage.getItem('zf_tower_'+k)==='1'; }catch(e){ return false; } }
+function openTowers(){ $('title').classList.add('hidden'); $('select').classList.add('hidden'); $('ending').classList.add('hidden'); $('spirits').classList.add('hidden');
+  renderTowers(); $('towers').classList.remove('hidden'); ST.mode='towers'; }
+function renderTowers(){ const g=$('twrGrid'); g.innerHTML='';
+  TOWERS.forEach(t=>{ const done=towerDone(t.key);
+    const d=document.createElement('div'); d.className='twr '+t.cls;
+    d.innerHTML=`${done?'<span class="done">✅</span>':''}<div class="tn">${t.em} ${t.name}</div>`
+      +`<div class="td">${t.len} rivales · jefe final · premio: espíritu + 2🪙</div><div class="stars">${t.stars}</div>`;
+    d.onclick=()=>{ ST.pendingTower=t; openSelect('tower'); };
+    g.appendChild(d); });
+}
+$('modeTowers').onclick=openTowers;
+$('towersBack').onclick=()=>{ $('towers').classList.add('hidden'); $('title').classList.remove('hidden'); ST.mode='title'; };
+function shuffleArr(a){ for(let i=a.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
+$('towerStartBtn').onclick=()=>{ if(ST.selP===null||!ST.pendingTower) return;
+  const t=ST.pendingTower; ST.tower=t;
+  const pool=shuffleArr([...Array(12).keys()]); const opps=[];
+  for(let i=0;i<t.len;i++) opps.push(pool[i%12]);
+  opps[t.len-1]=4; /* jefe final = Dragón */
+  ST.towerOpps=opps; startTowerFight(0); };
+function startTowerFight(step){ const t=ST.tower; ST.towerStep=step;
+  CPU_D = t.len>1 ? t.sd+(t.ed-t.sd)*(step/(t.len-1)) : t.ed;
+  ST.gameMode='tower'; beginFight(CHARS[ST.selP], CHARS[ST.towerOpps[step]]); }
+function endTowerFight(you){
+  $('pause').style.display='none'; $('endUnlock').classList.add('hidden');
+  const t=ST.tower, step=ST.towerStep, last=(step>=t.len-1);
+  try{ grantSpirit('spirit_'+ST.p1.ch.id); }catch(e){}
+  try{ if(you&&window.ZFchallenge){ window.ZFchallenge('win'); window.ZFchallenge('tower'); } }catch(e){}
+  if(!you){
+    ST.towerResult='lost';
+    $('endTitle').textContent='Derrota 💀';
+    $('endText').innerHTML=`Caíste en ${t.em} ${t.name} (rival ${step+1}/${t.len}). ¡Inténtalo otra vez!`;
+    $('rematch').textContent='🔁 Reintentar'; $('changeChar').textContent='‹ Torres';
+  } else if(!last){
+    ST.towerResult='next';
+    const nxt=CHARS[ST.towerOpps[step+1]], boss=(step+1>=t.len-1);
+    $('endTitle').textContent='¡Ganaste! ⚔️';
+    $('endText').innerHTML=`${t.em} ${t.name} · rival <b>${step+1}/${t.len}</b> derrotado.<br>Siguiente${boss?' — ¡JEFE FINAL!':''}: <b>${nxt.nm}</b> ${nxt.em}`;
+    $('rematch').textContent='Continuar ▶'; $('changeChar').textContent='Rendirse';
+  } else {
+    ST.towerResult='win';
+    try{ localStorage.setItem('zf_tower_'+t.key,'1'); }catch(e){}
+    const r=grantSpirit(t.spirit); if(typeof addCoins==='function') addCoins(2);
+    $('endTitle').textContent='🏆 ¡Torre superada!';
+    $('endText').innerHTML=`Conquistaste ${t.em} <b>${t.name}</b>.<br>Recompensa: <b>+2 🪙</b>`;
+    showEndUnlock(t.spirit, r.isNew);
+    $('rematch').textContent='🏯 Torres'; $('changeChar').textContent='‹ Menú';
+  }
+  ST.mode='end'; $('ending').classList.remove('hidden');
+}
+function towerContinue(){
+  if(ST.towerResult==='next') startTowerFight(ST.towerStep+1);
+  else if(ST.towerResult==='lost') startTowerFight(0);
+  else openTowers();
 }
 
 /* ===== Modo Rompe Blancos (Target Test estilo Melee) ===== */
 function buildTargetMap(idx){
   PLATFORMS=[]; targets=[]; targetTimer=0;
-  const layouts=[
-    ()=>{ PLATFORMS.push({x:W*.10,y:H*.58,w:W*.18},{x:W*.40,y:H*.46,w:W*.20},{x:W*.72,y:H*.56,w:W*.18},{x:W*.56,y:H*.70,w:W*.16});
-      [[.10,.50],[.20,.73],[.33,.51],[.47,.40],[.50,.65],[.63,.66],[.74,.50],[.82,.72],[.90,.56],[.40,.78]].forEach(p=>targets.push({x:W*p[0],y:H*p[1],r:16*S,alive:true})); },
-    ()=>{ PLATFORMS.push({x:W*.20,y:H*.50,w:W*.16},{x:W*.64,y:H*.50,w:W*.16},{x:W*.42,y:H*.34,w:W*.16},{x:W*.42,y:H*.66,w:W*.16});
-      [[.14,.55],[.26,.44],[.50,.28],[.50,.60],[.74,.44],[.86,.55],[.30,.72],[.70,.72],[.50,.78],[.50,.46]].forEach(p=>targets.push({x:W*p[0],y:H*p[1],r:16*S,alive:true})); },
-    ()=>{ PLATFORMS.push({x:W*.30,y:H*.60,w:W*.40},{x:W*.14,y:H*.44,w:W*.16},{x:W*.70,y:H*.44,w:W*.16});
-      [[.12,.55],[.21,.38],[.35,.54],[.45,.54],[.55,.54],[.65,.54],[.79,.38],[.88,.55],[.50,.74],[.50,.40]].forEach(p=>targets.push({x:W*p[0],y:H*p[1],r:16*S,alive:true})); }
+  const G=GY, py=f=>H*0.10+(G-H*0.10)*f, px=f=>W*(0.14+0.72*f);
+  /* 12 escenarios únicos (orden: rata,buey,tigre,conejo,dragon,serpiente,caballo,cabra,mono,gallo,perro,cerdo) */
+  const M=[
+   {p:[[.30,.40,.40],[.16,.66,.20],[.64,.66,.20]], t:[[.5,.16],[.38,.34],[.62,.34],[.26,.55],[.5,.5],[.74,.55],[.12,.80],[.38,.80],[.62,.80],[.88,.80]]},
+   {p:[[.18,.34,.16],[.66,.34,.16],[.40,.62,.20]], t:[[.22,.50],[.22,.26],[.22,.74],[.78,.50],[.78,.26],[.78,.74],[.5,.5],[.5,.86],[.5,.18],[.5,.68]]},
+   {p:[[.18,.58,.18],[.44,.42,.18],[.70,.58,.16]], t:[[.16,.74],[.30,.48],[.42,.30],[.54,.48],[.66,.30],[.78,.48],[.86,.72],[.14,.34],[.5,.66],[.5,.88]]},
+   {p:[[.30,.30,.18],[.16,.52,.16],[.64,.52,.18]], t:[[.5,.12],[.34,.24],[.66,.24],[.20,.42],[.80,.42],[.5,.40],[.30,.62],[.70,.62],[.5,.84],[.5,.62]]},
+   {p:[[.40,.26,.20],[.22,.50,.16],[.60,.50,.16],[.40,.76,.20]], t:[[.5,.14],[.32,.38],[.68,.38],[.14,.60],[.86,.60],[.5,.54],[.32,.76],[.68,.76],[.5,.90],[.5,.32]]},
+   {p:[[.18,.70,.60],[.30,.50,.16],[.56,.50,.16]], t:[[.14,.86],[.30,.66],[.42,.86],[.54,.66],[.66,.86],[.78,.66],[.88,.86],[.38,.44],[.62,.44],[.5,.30]]},
+   {p:[[.16,.55,.14],[.42,.55,.16],[.68,.55,.14]], t:[[.14,.40],[.30,.72],[.42,.40],[.54,.72],[.66,.40],[.80,.72],[.88,.46],[.14,.74],[.5,.16],[.5,.88]]},
+   {p:[[.18,.74,.16],[.36,.58,.16],[.54,.42,.16],[.72,.26,.16]], t:[[.22,.66],[.40,.50],[.58,.34],[.78,.18],[.88,.42],[.14,.50],[.34,.80],[.5,.88],[.66,.66],[.5,.5]]},
+   {p:[[.30,.34,.40],[.20,.62,.18],[.62,.62,.18]], t:[[.5,.18],[.36,.28],[.64,.28],[.22,.50],[.78,.50],[.5,.46],[.26,.76],[.74,.76],[.5,.88],[.5,.66]]},
+   {p:[[.40,.30,.20],[.40,.54,.20],[.40,.78,.20]], t:[[.5,.14],[.5,.26],[.5,.42],[.5,.50],[.5,.66],[.5,.74],[.5,.90],[.30,.40],[.70,.40],[.5,.58]]},
+   {p:[[.18,.40,.16],[.66,.40,.16],[.30,.68,.40]], t:[[.14,.56],[.28,.34],[.5,.24],[.72,.34],[.86,.56],[.30,.78],[.5,.88],[.70,.78],[.5,.5],[.5,.66]]},
+   {p:[[.22,.50,.16],[.62,.50,.16],[.34,.76,.32]], t:[[.40,.88],[.5,.88],[.60,.88],[.44,.66],[.56,.66],[.30,.46],[.70,.46],[.5,.32],[.20,.66],[.80,.66]]}
   ];
-  layouts[idx%layouts.length](); targetTotal=targets.length;
+  const m=M[idx%12];
+  m.p.forEach(p=>PLATFORMS.push({x:W*p[0],y:py(p[1]),w:W*p[2]}));
+  m.t.forEach(t=>targets.push({x:px(t[0]),y:py(t[1]),r:15*S,alive:true}));
+  targetTotal=targets.length;
 }
 function startTarget(){
   if(ST.selP===null) return;
   $('select').classList.add('hidden'); $('ending').classList.add('hidden');
+  groundFrac=0.70; resize();
   const c=CHARS[ST.selP]; preloadSprites(c);
   ST.p1=new Fighter(c, W*.12, 1, false); ST.p1.y=GY; ST.p2=null;
   buildTargetMap(ST.selP);
   ST.pal=THEMES[Math.floor(Math.random()*THEMES.length)];
   projectiles=[]; particles=[]; flashes=[]; hitstopT=0; ST.paused=false;
   targetTimer=0; ST.gameMode='target'; ST.mode='target'; $('pause').style.display='block';
+  try{ if(window.ZFfire) window.ZFfire(); }catch(e){}
 }
 function breakTarget(tg){ if(!tg.alive) return; tg.alive=false; sfx('heavy');
   spawnFlash(tg.x,tg.y,'#ffd54a',true); spawnParticles(tg.x,tg.y,'#e8923f',16,1.8); spawnParticles(tg.x,tg.y,'#fff',8,1.4);
@@ -1180,22 +1583,37 @@ function fmtTime(t){ if(t==null) return '—'; const mm=Math.floor(t/60), ss=(t%
 function endTarget(){
   if(ST.mode!=='target') return;
   ST.mode='end'; $('pause').style.display='none';
+  $('rematch').textContent='Revancha'; $('changeChar').textContent='Cambiar peleador';
   const id=ST.p1.ch.id, ti=targetTimer;
   const record=setBest(id,ti), best=getBest(id);
   $('endTitle').textContent = record?'¡Nuevo récord! 🏆':'¡Completado! 🎯';
   $('endText').innerHTML=`<b>${ST.p1.ch.em} ${ST.p1.ch.nm}</b> rompió los ${targetTotal} blancos.<br>Tu tiempo: <b>${fmtTime(ti)}</b> ⏱️<br>Mejor tiempo: <b>${fmtTime(best)}</b>${record?' ✨':''}`;
+  try{ const el=champFromTime(ti); const spId='el_'+ST.p1.ch.id+'_'+el; const r=grantSpirit(spId); showEndUnlock(spId,r.isNew); }catch(e){}
+  try{ if(window.ZFchallenge) window.ZFchallenge('target'); }catch(e){}
   $('ending').classList.remove('hidden');
 }
 function endMatch(winner,how){
   if(ST.mode!=='fight') return;
-  ST.mode='end'; $('pause').style.display='none';
-  $('endTitle').textContent = how==='ko'?'¡K.O.!':'¡Tiempo!';
   const you=winner===ST.p1;
+  if(ST.gameMode==='tower'){ return endTowerFight(you); }
+  ST.mode='end'; $('pause').style.display='none';
+  $('rematch').textContent='Revancha'; $('changeChar').textContent='Cambiar peleador';
+  $('endTitle').textContent = how==='ko'?'¡K.O.!':'¡Tiempo!';
   $('endText').innerHTML = `<b>${winner.ch.em} ${winner.ch.nm}</b> gana ${how==='ko'?'por nocaut':'por más vida al expirar el tiempo'}.<br>${you?'¡Victoria! 🎉':'La CPU se impuso esta vez…'}`;
+  try{ const spId=(you?'spirit_':'dark_')+ST.p1.ch.id; const r=grantSpirit(spId); showEndUnlock(spId,r.isNew); }catch(e){}
+  try{ if(you&&window.ZFchallenge) window.ZFchallenge('win'); }catch(e){}
   $('ending').classList.remove('hidden');
 }
-$('rematch').onclick=()=>{ if(ST.gameMode==='target') startTarget(); else startFight(); };
-$('changeChar').onclick=()=>{ $('ending').classList.add('hidden');
+$('rematch').onclick=()=>{ $('endUnlock').classList.add('hidden');
+  if(ST.gameMode==='tower') towerContinue();
+  else if(ST.gameMode==='target') startTarget();
+  else startFight(); };
+$('changeChar').onclick=()=>{ $('endUnlock').classList.add('hidden'); $('ending').classList.add('hidden');
+  if(ST.gameMode==='tower'){
+    if(ST.towerResult==='win'){ $('title').classList.remove('hidden'); ST.mode='title'; }
+    else openTowers();
+    return;
+  }
   ST.selP=null; ST.selC=null;
   [...grid.children].forEach(el=>el.classList.remove('sel','cpu'));
   $('selInfo').innerHTML='Toca un animal para ver su estilo.'; applySelectButtons(); updateFightBtn();
@@ -1352,6 +1770,490 @@ function loop(now){
   else if(ST.mode==='target'){ drawTargetHUD(); }
 }
 requestAnimationFrame(loop);
+/* ===================================================================
+   SISTEMA DE ESPÍRITUS / FIGURITAS  ·  (estilo Trophy Lottery de Melee)
+   =================================================================== */
+(function(){
+const RAR=['comun','uncommon','rare','epic','legendario','mistico'];
+const RARNAME={comun:'Común',uncommon:'Uncommon',rare:'Rare',epic:'Épico',legendario:'Legendario',mistico:'Místico'};
+const ELN={agua:'Agua',fuego:'Fuego',tierra:'Tierra',viento:'Viento (Aire)',metal:'Metal',madera:'Madera'};
+const PVMAP={comun:50,uncommon:70,rare:90,epic:120,legendario:160,mistico:220};
+const THEME={
+  agua:{g:['#0a2540','#1d4a73'],glyph:'💧',label:'Agua'},
+  fuego:{g:['#3a0f0a','#9c3a1e'],glyph:'🔥',label:'Fuego'},
+  tierra:{g:['#2a1f10','#75602f'],glyph:'🪨',label:'Tierra'},
+  viento:{g:['#0e2420','#3a7a63'],glyph:'🌪️',label:'Viento'},
+  metal:{g:['#14141c','#5d5d75'],glyph:'⚙️',label:'Metal'},
+  madera:{g:['#121b0a','#527a2c'],glyph:'🌿',label:'Madera'},
+  leyenda:{g:['#1a0b2e','#5a2b9a'],glyph:'✨',label:'Leyenda'},
+  maya:{g:['#0c2a1f','#1f6e4a'],glyph:'🐆',label:'Mesoamérica'},
+  egipto:{g:['#3a2a08','#b8860b'],glyph:'☥',label:'Egipto'},
+  dorado:{g:['#4a3505','#e8b923'],glyph:'🏅',label:'Dorado'},
+  griego:{g:['#0b1c3a','#3a6ea5'],glyph:'🏛️',label:'Grecia'},
+  nordico:{g:['#0a1a22','#3a6b7a'],glyph:'❄️',label:'Nórdico'},
+  japon:{g:['#2a0a14','#a83b4b'],glyph:'⛩️',label:'Japón'},
+  hindu:{g:['#3a1a05','#d98a2b'],glyph:'🪷',label:'India'},
+  asia:{g:['#2a0f1a','#7a3b5a'],glyph:'🏯',label:'Asia'},
+  cosmos:{g:['#0a0820','#3a2b7a'],glyph:'🌌',label:'Cosmos'},
+  gema:{g:['#10243a','#2b8a9a'],glyph:'💎',label:'Gema'},
+  natura:{g:['#0e2410','#3a7a3a'],glyph:'🌿',label:'Natura'},
+  celta:{g:['#0e2418','#2f7a4a'],glyph:'🍀',label:'Celta'},
+  africa:{g:['#2a1505','#b8702b'],glyph:'🌍',label:'África'},
+  racha:{g:['#3a1505','#e8632b'],glyph:'🔥',label:'Racha'}
+};
+const MONTHS=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const MONTH_EM=['❄️','💗','🍀','🌧️','🌸','🌗','🏖️','🌻','🍂','🎃','🌬️','🎄'];
+const CHAL_GOAL=35, CHAL_PTS=5;
+const HSIGN={z_aries:'fuego',z_tauro:'tierra',z_geminis:'viento',z_cancer:'agua',z_leo:'fuego',z_virgo:'tierra',z_libra:'viento',z_escorpio:'agua',z_sagitario:'fuego',z_capricornio:'tierra',z_acuario:'viento',z_piscis:'agua'};
+const LEG={l_qinglong:'viento',l_zhuque:'fuego',l_baihu:'metal',l_xuanwu:'agua'};
+function lottoTheme(id,title){ if(HSIGN[id])return HSIGN[id]; if(LEG[id])return LEG[id];
+  if(/Maya/.test(title))return 'maya'; if(/Egipto/.test(title))return 'egipto'; return 'leyenda'; }
+
+/* ---- roster de espíritus ---- */
+const SPIRITS={}, ORDER=[];   // ORDER = lista ordenada de ids ; SPIRITS[id] = datos
+const SECTIONS=[];            // {title, ids:[]}
+function add(id,d){ SPIRITS[id]=d; ORDER.push(id); return id; }
+
+/* 1) Luchadores (ganar pelea) + 2) Oscuros (perder pelea) */
+const fSec={title:'⚔️ Luchadores',ids:[]}, dSec={title:'🌑 Oscuros',ids:[]};
+CHARS.forEach(c=>{
+  fSec.ids.push(add('spirit_'+c.id,{nm:c.nm,em:c.em,rar:'rare',src:'win',cat:'Luchador',th:c.el,pv:c.st.hp,
+    desc:`${c.nm} (${c.cn}), del elemento ${ELN[c.el]||c.el}. Estilo: ${c.arch}.`,
+    how:`Gana una pelea vs CPU usando a ${c.nm}.`}));
+  dSec.ids.push(add('dark_'+c.id,{nm:c.nm+' Oscuro',em:c.em,rar:'epic',src:'loss',cat:'Espíritu Oscuro',th:c.el,dark:true,
+    desc:`La sombra de ${c.nm}, nacida de sus derrotas. Su poder crece con cada caída.`,
+    how:`Pierde una pelea vs CPU usando a ${c.nm}.`}));
+});
+SECTIONS.push(fSec,dSec);
+
+/* 3) Espíritus Elementales (Target Test): cada personaje × 6 elementos según el tiempo */
+const ELORD=['viento','fuego','agua','madera','tierra','metal'];
+const ELBAND={viento:'menos de 1:00',fuego:'entre 1:00 y 2:00',agua:'entre 2:00 y 3:00',madera:'entre 3:00 y 4:00',tierra:'entre 4:00 y 5:00',metal:'5:00 o más'};
+const ELRAR={viento:'legendario',fuego:'epic',agua:'rare',madera:'uncommon',tierra:'uncommon',metal:'comun'};
+const eSec={title:'🌈 Elementales (Target Test)',ids:[]};
+CHARS.forEach(c=>{ ELORD.forEach(el=>{ const id='el_'+c.id+'_'+el;
+  eSec.ids.push(add(id,{nm:c.nm+' · '+THEME[el].label, em:c.em, rar:ELRAR[el], src:'target', cat:'Elemental · '+THEME[el].label, th:el,
+    desc:`${c.nm} canalizando el poder de ${THEME[el].label}. Forma despertada al dominar su Target Test con ese ritmo.`,
+    how:`Completa el Target Test de ${c.nm} en ${ELBAND[el]}.`})); }); });
+SECTIONS.push(eSec);
+
+/* 3b) Maestros de Torre (modo Torres estilo MK) */
+const tSec={title:'🏯 Maestros de Torre',ids:[]};
+[['tower_bronce','Campeón de Bronce','🥉','rare','tierra','Torre de Bronce'],
+ ['tower_plata','Campeón de Plata','🥈','epic','metal','Torre de Plata'],
+ ['tower_oro','Campeón de Oro','🥇','legendario','fuego','Torre de Oro'],
+ ['tower_leyenda','Campeón Legendario','🏆','mistico','leyenda','Torre Legendaria']
+].forEach(([id,nm,em,rar,th,tw])=>{ tSec.ids.push(add(id,{nm,em,rar,src:'tower',cat:'Maestro de Torre',th,pv:PVMAP[rar],
+  desc:`Reservado para quien conquista la ${tw}. Su sola presencia impone respeto en el ring.`,
+  how:`Completa la ${tw} en el modo Torres.`})); });
+SECTIONS.push(tSec);
+
+/* 3c) Espíritus Dorados del Mes (retos diarios estilo Duolingo) */
+const mSec={title:'📅 Espíritus del Mes',ids:[]};
+MONTHS.forEach((mn,i)=>{ const id='month_'+String(i+1).padStart(2,'0');
+  const nm = i===5 ? 'Dorado de Medio Año' : 'Dorado de '+mn;
+  mSec.ids.push(add(id,{nm,em:MONTH_EM[i],rar:'legendario',src:'month',cat:'Dorado · '+mn,th:'dorado',
+    desc:`Recompensa dorada de ${mn}. Se otorga a quienes completan las misiones diarias durante el mes.`,
+    how:`Consigue ${CHAL_GOAL} puntos de misiones diarias durante ${mn}.`})); });
+SECTIONS.push(mSec);
+
+/* 4-7) Pool de la MÁQUINA (lotería) — mezcla de mitologías */
+const LOTTO_DEAD=[ /* catálogo movido a spirits-data.js (no usado) */
+ // Leyendas del Zodiaco chino + WONEJO MALO
+ ['Leyendas del Zodiaco', [
+  ['l_gato','El Gato Engañado','🐈','rare','La Rata lo engañó para que llegara tarde a la Gran Carrera; por eso no es del zodiaco. Jura venganza eterna.'],
+  ['l_jade','Emperador de Jade','👑','legendario','玉皇. Soberano del cielo que convocó la Gran Carrera para ordenar los 12 signos.'],
+  ['l_qinglong','Dragón Azur','🐲','epic','青龍. Guardián del Este y la primavera; domina el viento y la lluvia.'],
+  ['l_zhuque','Fénix Bermellón','🐦‍🔥','epic','朱雀. Ave de fuego del Sur, símbolo del verano y el renacer.'],
+  ['l_baihu','Tigre Blanco','🐯','epic','白虎. Bestia del Oeste y del otoño; protector contra los demonios.'],
+  ['l_xuanwu','Tortuga Negra','🐢','epic','玄武. Guardián del Norte y del invierno: tortuga y serpiente unidas.'],
+  ['l_qilin','Qilin','🦄','legendario','麒麟. Bestia sagrada que aparece junto a los sabios y trae fortuna.'],
+  ['l_nian','Nian','👹','rare','年. Monstruo que atacaba en Año Nuevo; teme al rojo y a los petardos.'],
+  ['l_yinyang','Yin-Yang','☯️','rare','El equilibrio de fuerzas opuestas que mueve el universo.'],
+  ['l_sol','Sol de Papel','☀️','comun','El astro que ilumina cada escenario de papel.'],
+  ['l_luna','Luna de Papel','🌙','comun','Vela por las peleas nocturnas del Lago Lunar.'],
+  ['l_wonejo','WONEJO MALO','😈','mistico','La mascota maldita del estudio. Dicen que solo aparece para los coleccionistas más obsesivos. ¿La encontrarás?'],
+ ]],
+ // Horóscopo occidental
+ ['Horóscopo Occidental', [
+  ['z_aries','Aries','♈','comun','21 mar–19 abr · Fuego. Impulsivo y valiente, el primero en lanzarse.'],
+  ['z_tauro','Tauro','♉','comun','20 abr–20 may · Tierra. Terco como un buey, imposible de mover.'],
+  ['z_geminis','Géminis','♊','uncommon','21 may–20 jun · Aire. Dos mentes en un mismo cuerpo.'],
+  ['z_cancer','Cáncer','♋','uncommon','21 jun–22 jul · Agua. Coraza dura, corazón blando.'],
+  ['z_leo','Leo','♌','rare','23 jul–22 ago · Fuego. Nació para reinar el escenario.'],
+  ['z_virgo','Virgo','♍','comun','23 ago–22 sep · Tierra. Perfeccionista letal.'],
+  ['z_libra','Libra','♎','uncommon','23 sep–22 oct · Aire. Busca el golpe perfectamente balanceado.'],
+  ['z_escorpio','Escorpio','♏','rare','23 oct–21 nov · Agua. Aguijón venenoso y rencor eterno.'],
+  ['z_sagitario','Sagitario','♐','uncommon','22 nov–21 dic · Fuego. Arquero que nunca falla.'],
+  ['z_capricornio','Capricornio','♑','comun','22 dic–19 ene · Tierra. Escala cualquier obstáculo.'],
+  ['z_acuario','Acuario','♒','uncommon','20 ene–18 feb · Aire. Rebelde imprevisible.'],
+  ['z_piscis','Piscis','♓','comun','19 feb–20 mar · Agua. Fluye entre dos mundos.'],
+ ]],
+ // Mitología maya y azteca
+ ['Mitología Maya y Azteca', [
+  ['m_quetzal','Quetzalcóatl','🪶','legendario','La Serpiente Emplumada. Dios del viento y la sabiduría de mexicas y mayas.'],
+  ['m_tezca','Tezcatlipoca','🐆','epic','El Espejo Humeante. Dios de la noche, la magia y el destino.'],
+  ['m_kukulkan','Kukulkán','🐍','epic','Serpiente emplumada maya; desciende por Chichén Itzá en los equinoccios.'],
+  ['m_itzamna','Itzamná','🦎','rare','Dios maya creador, señor del cielo y de la escritura.'],
+  ['m_ahpuch','Ah Puch','💀','rare','Señor maya de la muerte y del inframundo, Xibalbá.'],
+  ['m_balam','Balam Jaguar','🐾','uncommon','Guardián jaguar de los pueblos y de los campos.'],
+ ]],
+ // Dioses de Egipto
+ ['Dioses de Egipto', [
+  ['e_ra','Ra','🌞','legendario','Dios del sol; cada noche cruza el inframundo y renace al amanecer.'],
+  ['e_anubis','Anubis','🐺','epic','Guía de las almas y guardián de las balanzas del juicio.'],
+  ['e_horus','Horus','🦅','epic','Dios halcón del cielo y la realeza; su ojo todo lo ve.'],
+  ['e_osiris','Osiris','⚰️','epic','Señor del más allá; murió y resucitó para reinar entre los muertos.'],
+  ['e_bastet','Bastet','🐈‍⬛','rare','Diosa gata de la protección, el hogar y la alegría.'],
+  ['e_thoth','Thoth','📜','rare','Dios de la sabiduría, la escritura y la luna.'],
+  ['e_set','Set','🌩️','uncommon','Dios del caos, las tormentas y el desierto.'],
+  ['e_anj','Anj','☥','comun','La llave de la vida eterna del antiguo Egipto.'],
+ ]],
+];
+const LOTTO_IDS=[];
+let STREAK_IDS=[];
+(window.ZF_COLLECT||[]).forEach(col=>{
+  const sec={title:'🌌 '+col.title,ids:[]};
+  col.items.forEach(it=>{ const id=it[0],nm=it[1],em=it[2],rar=it[3],desc=it[4],th=it[5]||col.th;
+    add(id,{nm,em,rar,src:'lottery',cat:col.title,th,desc,how:'Se obtiene en la 🎰 Máquina de Lotería.'});
+    sec.ids.push(id); LOTTO_IDS.push(id); });
+  SECTIONS.push(sec);
+});
+const rSec={title:'🔥 Guardianes de la Racha',ids:[]};
+(window.ZF_STREAK||[]).forEach(it=>{ const id=it[0],nm=it[1],em=it[2],rar=it[3],desc=it[4],th=it[5]||'racha';
+  add(id,{nm,em,rar,src:'streak',cat:'Guardián de Racha',th,desc,how:'Se gana al alcanzar hitos de racha de fuego (días 7, 10, 14, 17, 20, 25, 35).'});
+  rSec.ids.push(id); STREAK_IDS.push(id); });
+SECTIONS.push(rSec);
+ORDER.forEach((id,i)=>{ SPIRITS[id].num=String(i+1).padStart(3,'0'); });
+const TOTAL3=String(ORDER.length).padStart(3,'0');
+
+/* ---- almacenamiento ---- */
+const LS=localStorage;
+function loadOwned(){ try{ return JSON.parse(LS.getItem('zf_spirits')||'{}'); }catch(e){ return {}; } }
+let OWNED=loadOwned();
+function owned(id){ return !!OWNED[id]; }
+function saveOwned(){ try{ LS.setItem('zf_spirits',JSON.stringify(OWNED)); }catch(e){} }
+function getCoins(){ return parseInt(LS.getItem('zf_coins')||'0',10)||0; }
+function setCoins(n){ try{ LS.setItem('zf_coins',String(Math.max(0,n))); }catch(e){} updateCoins(); }
+function addCoins(n){ setCoins(getCoins()+n); }
+function updateCoins(){ const c=getCoins(); const a=$('coinTop'),b=$('coinHub'); if(a)a.textContent='🪙 '+c; if(b)b.textContent='🪙 '+c; }
+
+/* ---- desbloqueo ---- */
+function grantSpirit(id){ if(!SPIRITS[id]) return {isNew:false}; const isNew=!OWNED[id]; if(isNew){ OWNED[id]=true; saveOwned(); } return {isNew,spirit:SPIRITS[id]}; }
+window.grantSpirit=grantSpirit; window.addCoins=addCoins;
+
+function champFromTime(ti){
+  if(ti<60)  return 'viento';
+  if(ti<120) return 'fuego';
+  if(ti<180) return 'agua';
+  if(ti<240) return 'madera';
+  if(ti<300) return 'tierra';
+  return 'metal';
+}
+window.champFromTime=champFromTime;
+
+/* ---- aviso de desbloqueo en pantalla de fin ---- */
+function showEndUnlock(id,isNew){
+  const sp=SPIRITS[id], box=$('endUnlock'); if(!sp||!box) return;
+  box.classList.remove('hidden');
+  $('endUnlockText').innerHTML = (isNew?'✨ <b>¡Nuevo espíritu desbloqueado!</b><br>':'Ya tenías este espíritu:<br>')+`${sp.em} <b>${sp.nm}</b> · ${RARNAME[sp.rar]}`;
+  $('endSeeSpirit').onclick=()=>{ $('ending').classList.add('hidden'); ST.mode='title'; openSpirits(); setTimeout(()=>openDetail(id),60); };
+  if(isNew) toast(sp);
+}
+window.showEndUnlock=showEndUnlock;
+$('rematch').addEventListener('click',()=>$('endUnlock').classList.add('hidden'));
+$('changeChar').addEventListener('click',()=>$('endUnlock').classList.add('hidden'));
+
+/* ---- toast ---- */
+function toast(sp){ const t=$('spToast'); t.className='r-'+sp.rar; t.querySelector('.te').textContent=sp.em;
+  t.querySelector('.tt').innerHTML=`<b>¡Espíritu obtenido!</b><small>${sp.nm} · ${RARNAME[sp.rar]}</small>`;
+  t.classList.add('show'); t.onclick=()=>{ t.classList.remove('show'); openSpirits(); };
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),4200); }
+
+/* ---- HUB ---- */
+function openSpirits(){ $('title').classList.add('hidden'); $('ending').classList.add('hidden'); $('select').classList.add('hidden');
+  $('spirits').classList.remove('hidden'); ST.mode='spirits'; updateCoins(); updatePlay(); updateFire(); renderAlbum(); showTab('album'); }
+function closeSpirits(){ $('spirits').classList.add('hidden'); $('title').classList.remove('hidden'); ST.mode='title'; updateTeaser(); }
+$('modeSpirits').onclick=openSpirits;
+$('spClose').onclick=closeSpirits;
+
+function showTab(which){
+  const al=which==='album', lo=which==='lotto', re=which==='reto', sh=which==='shop';
+  $('tabAlbum').classList.toggle('on',al); $('tabLotto').classList.toggle('on',lo); $('tabReto').classList.toggle('on',re); $('tabShop').classList.toggle('on',sh);
+  $('albumView').style.display=al?'':'none'; $('lottoView').style.display=lo?'':'none'; $('chalView').style.display=re?'':'none'; $('shopView').style.display=sh?'':'none';
+  if(al) renderAlbum(); else if(lo) updateBet(); else if(re) renderChal(); else renderShop();
+}
+$('tabAlbum').onclick=()=>showTab('album');
+$('tabLotto').onclick=()=>showTab('lotto');
+$('tabReto').onclick=()=>showTab('reto');
+$('tabShop').onclick=()=>showTab('shop');
+
+/* ---- álbum ---- */
+function renderAlbum(){
+  const total=ORDER.length, got=ORDER.filter(owned).length;
+  $('spProg').textContent=`Colección: ${got} / ${total} espíritus`;
+  const grid=$('spGrid'); grid.innerHTML='';
+  SECTIONS.forEach(sec=>{
+    const g=sec.ids.filter(owned).length;
+    const h=document.createElement('div'); h.style.cssText='grid-column:1/-1;margin:10px 0 2px;color:#cfd6ff;font-weight:800;font-size:13px';
+    h.textContent=`${sec.title}  (${g}/${sec.ids.length})`; grid.appendChild(h);
+    sec.ids.forEach(id=>{
+      const sp=SPIRITS[id], ok=owned(id);
+      const c=document.createElement('div');
+      c.className=`sp-cell r-${sp.rar} ${ok?'owned':'locked'}${sp.dark?' dark':''}`;
+      c.innerHTML=`<span class="rgem"></span><span class="se">${ok?sp.em:'❔'}</span><span class="sn">${ok?sp.nm:'???'}</span>`;
+      c.onclick=()=>openDetail(id);
+      grid.appendChild(c);
+    });
+  });
+}
+
+/* ---- detalle ---- */
+function tcgCard(id,ok){
+  const sp=SPIRITS[id], th=THEME[sp.th]||THEME.leyenda;
+  const holo=sp.rar==='epic'||sp.rar==='legendario'||sp.rar==='mistico';
+  return `<div class="tcg r-${sp.rar}${holo?' holo':''}${ok?'':' locked'}${sp.dark?' dark':''}">
+    <div class="tcg-inner">
+      <div class="tcg-top"><span class="tcg-name">${ok?sp.nm:'???'}</span><span class="tcg-rarbadge r-${sp.rar}">${RARNAME[sp.rar]}</span></div>
+      <div class="tcg-art" style="background:linear-gradient(160deg,${th.g[0]},${th.g[1]})"><span class="tcg-emoji">${ok?sp.em:'❔'}</span></div>
+      <div class="tcg-type">${th.glyph} ${th.label} · ${sp.cat}</div>
+      <div class="tcg-desc">${ok?sp.desc:'🔒 Cómo conseguirla: '+sp.how}</div>
+      <div class="tcg-foot"><span>Nº ${sp.num}/${TOTAL3}</span><span>${th.label}</span></div>
+    </div>
+  </div>`;
+}
+function openDetail(id){
+  const ok=owned(id), host=$('spdCard'); host.className='spd-host';
+  host.innerHTML=tcgCard(id,ok)+`<button class="btn ghost" id="spdClose" style="margin-top:12px;width:100%">Cerrar</button>`;
+  $('spDetail').classList.add('show');
+  $('spdClose').onclick=()=>$('spDetail').classList.remove('show');
+}
+$('spDetail').onclick=e=>{ if(e.target.id==='spDetail') $('spDetail').classList.remove('show'); };
+
+/* ---- máquina de lotería ---- */
+function predictRar(bet){ return RAR[Math.min(5,Math.round((bet-1)/19*5))]; }
+function updateBet(){ const b=+$('betRange').value; $('betNum').textContent=b;
+  $('betTier').innerHTML='más probable:<br>'+RARNAME[predictRar(b)]; updateCoins(); }
+$('betRange').oninput=updateBet;
+
+function rollRarity(bet){
+  const center=(bet-1)/19*5, spread=1.25;
+  const w=RAR.map((_,i)=>Math.exp(-((i-center)**2)/(2*spread*spread)));
+  let sum=w.reduce((a,b)=>a+b,0), r=Math.random()*sum;
+  for(let i=0;i<w.length;i++){ r-=w[i]; if(r<=0) return i; }
+  return 0;
+}
+function lottoPick(bet){
+  const rolled=rollRarity(bet);
+  for(let d=0; d<RAR.length; d++){
+    const tries = d===0?[0]:[rolled-d,rolled+d];
+    for(const ri of tries){
+      if(ri<0||ri>=RAR.length) continue;
+      const pool=LOTTO_IDS.filter(id=>SPIRITS[id].rar===RAR[ri] && !owned(id));
+      if(pool.length) return pool[Math.floor(Math.random()*pool.length)];
+    }
+  }
+  return null;
+}
+let spinning=false;
+$('spinBtn').onclick=()=>{
+  if(spinning) return;
+  const bet=+$('betRange').value, coins=getCoins();
+  if(coins<bet){ const f=$('lottoFace'); f.textContent='🪙'; const m=f.parentElement;
+    m.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:240,iterations:2});
+    flashHint('No tienes suficientes monedas. Apuesta menos o vuelve mañana.'); return; }
+  const allOwned=LOTTO_IDS.every(owned);
+  if(allOwned){ flashHint('¡Ya tienes todos los espíritus de la máquina! 🎉'); return; }
+  setCoins(coins-bet); fireAction();
+  spinning=true; $('spinBtn').disabled=true;
+  const reel=['🌀','✨','🌟','💫','⭐','🔮','🎴'];
+  let n=0; const face=$('lottoFace');
+  const iv=setInterval(()=>{ face.textContent=reel[n++%reel.length]; },70);
+  setTimeout(()=>{
+    clearInterval(iv);
+    const id=lottoPick(bet);
+    if(!id){ face.textContent='🎉'; flashHint('¡Colección de máquina completa!'); spinning=false; $('spinBtn').disabled=false; return; }
+    const sp=SPIRITS[id]; grantSpirit(id);
+    face.textContent=sp.em;
+    flashHint(`✨ ${sp.nm} · ${RARNAME[sp.rar]}`);
+    toast(sp); updateCoins(); ZFchallenge('spin');
+    setTimeout(()=>openDetail(id),350);
+    spinning=false; $('spinBtn').disabled=false;
+  },1100);
+};
+function flashHint(t){ const h=document.querySelector('.lotto-hint'); h.dataset.def=h.dataset.def||h.textContent;
+  h.textContent=t; h.style.color='#ffd86b'; clearTimeout(flashHint._t);
+  flashHint._t=setTimeout(()=>{ h.textContent=h.dataset.def; h.style.color=''; },3200); }
+
+/* ---- recompensa diaria (racha de 7) ---- */
+function dstr(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function checkDaily(){
+  const today=dstr(new Date()); const last=LS.getItem('zf_lastclaim');
+  if(last===today) return;
+  let streak=parseInt(LS.getItem('zf_streak')||'0',10)||0;
+  const y=new Date(); y.setDate(y.getDate()-1);
+  streak = (last===dstr(y)) ? streak+1 : 1;
+  if(streak>7) streak=7;
+  addCoins(streak);
+  LS.setItem('zf_streak',String(streak)); LS.setItem('zf_lastclaim',today);
+  showDaily(streak);
+}
+function showDaily(streak){
+  $('dailyText').innerHTML=`¡Día <b>${streak}</b> seguido! Recibes <b>+${streak} 🪙</b>.<br><small style="color:#9fb0ff">Vuelve mañana para más (hasta 7/día). Gasta tus monedas en la 🎰 Máquina.</small>`;
+  const row=$('streakRow'); row.innerHTML='';
+  for(let i=1;i<=7;i++){ const d=document.createElement('div');
+    d.className='d'+(i<streak?' got':'')+(i===streak?' today':'');
+    d.innerHTML=`Día ${i}<b>+${i}🪙</b>`; row.appendChild(d); }
+  $('daily').classList.remove('hidden');
+}
+$('dailyOk').onclick=()=>$('daily').classList.add('hidden');
+function tryDaily(){ const intro=$('intro');
+  if(!intro || intro.style.display==='none' || getComputedStyle(intro).display==='none'){ checkDaily(); }
+  else setTimeout(tryDaily,500); }
+
+/* ---- starfield del menú (galaxia estilo Melee) ---- */
+const sc=$('stars'), sx=sc.getContext('2d'); let STARS=[], SHOOT=[], sw=0, sh=0;
+function initStars(){ sw=sc.width=innerWidth; sh=sc.height=innerHeight;
+  const n=Math.min(220,Math.floor(sw*sh/9000)); STARS=[];
+  for(let i=0;i<n;i++){ const z=Math.random(); STARS.push({x:Math.random()*sw,y:Math.random()*sh,z,
+    r:z*1.6+0.3, tw:Math.random()*6.28, ts:0.6+Math.random()*1.6,
+    c:Math.random()<0.12?['#9fb0ff','#ffd6a8','#ff9ad1','#a8f0ff'][Math.floor(Math.random()*4)]:'#ffffff'}); } }
+function starLoop(t){
+  if($('title').classList.contains('hidden')){ requestAnimationFrame(starLoop); return; }
+  sx.clearRect(0,0,sw,sh);
+  for(const s of STARS){ s.y+=(0.05+s.z*0.35); if(s.y>sh){ s.y=0; s.x=Math.random()*sw; }
+    const a=0.45+0.55*Math.abs(Math.sin(t*0.001*s.ts+s.tw));
+    sx.globalAlpha=a; sx.fillStyle=s.c; sx.beginPath(); sx.arc(s.x,s.y,s.r,0,7); sx.fill(); }
+  sx.globalAlpha=1;
+  if(Math.random()<0.006) SHOOT.push({x:Math.random()*sw,y:Math.random()*sh*0.5,vx:6+Math.random()*5,vy:3+Math.random()*3,life:1});
+  for(let i=SHOOT.length-1;i>=0;i--){ const m=SHOOT[i]; sx.strokeStyle=`rgba(255,255,255,${m.life})`; sx.lineWidth=2;
+    sx.beginPath(); sx.moveTo(m.x,m.y); sx.lineTo(m.x-m.vx*4,m.y-m.vy*4); sx.stroke();
+    m.x+=m.vx; m.y+=m.vy; m.life-=0.02; if(m.life<=0||m.x>sw||m.y>sh) SHOOT.splice(i,1); }
+  requestAnimationFrame(starLoop);
+}
+addEventListener('resize',initStars); initStars(); requestAnimationFrame(starLoop);
+
+/* ---- RETOS DIARIOS + ESPÍRITU DORADO MENSUAL (estilo Duolingo) ---- */
+const CHAL=[
+ {t:'Gana 1 pelea',m:'win',g:1},{t:'Gana 2 peleas',m:'win',g:2},{t:'Gana 3 peleas',m:'win',g:3},
+ {t:'Completa 1 Target Test',m:'target',g:1},{t:'Completa 2 Target Test',m:'target',g:2},
+ {t:'Sube 1 piso de una torre',m:'tower',g:1},{t:'Sube 2 pisos de torre',m:'tower',g:2},
+ {t:'Gira la máquina 1 vez',m:'spin',g:1},{t:'Gira la máquina 2 veces',m:'spin',g:2}
+];
+function monthKey(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1); }
+function chalState(){ try{ return JSON.parse(LS.getItem('zf_chal')||'{}'); }catch(e){ return {}; } }
+function saveChal(s){ try{ LS.setItem('zf_chal',JSON.stringify(s)); }catch(e){} }
+function ensureChal(){ const s=chalState(), dk=dstr(new Date()), mk=monthKey(); let ch=false;
+  if(s.day!==dk){ s.day=dk; s.prog={}; s.done=[false,false,false]; ch=true; }
+  if(s.month!==mk){ s.month=mk; s.pts=0; ch=true; }
+  if(s.pts==null){ s.pts=0; ch=true; }
+  if(ch) saveChal(s); return s; }
+function todaysChallenges(){ let r=0; for(const ch of dstr(new Date())) r=(r*31+ch.charCodeAt(0))>>>0;
+  const idx=[...CHAL.keys()]; const rnd=()=>{ r=(r*9301+49297)%233280; return r/233280; };
+  for(let i=idx.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [idx[i],idx[j]]=[idx[j],idx[i]]; }
+  return idx.slice(0,3).map(i=>CHAL[i]); }
+function ZFchallenge(metric,n){ n=n||1; const s=ensureChal(); s.prog[metric]=(s.prog[metric]||0)+n;
+  const today=todaysChallenges();
+  today.forEach((c,i)=>{ if(!s.done[i] && (s.prog[c.m]||0)>=c.g){ s.done[i]=true; s.pts+=CHAL_PTS; addCoins(1);
+     toastMsg('✅ ¡Misión completada!','+'+CHAL_PTS+' pts · +1 🪙'); } });
+  const mi=new Date().getMonth(), mid='month_'+String(mi+1).padStart(2,'0');
+  if(s.pts>=CHAL_GOAL && !owned(mid)){ const r=grantSpirit(mid); if(r.isNew) toast(SPIRITS[mid]); }
+  saveChal(s); if($('chalView')&&$('chalView').style.display!=='none') renderChal(); updateTeaser(); }
+window.ZFchallenge=ZFchallenge;
+function toastMsg(title,sub){ const t=$('spToast'); t.className=''; t.querySelector('.te').textContent='✅';
+  t.querySelector('.tt').innerHTML=`<b>${title}</b><small>${sub||''}</small>`; t.classList.add('show');
+  t.onclick=()=>{ t.classList.remove('show'); openSpirits(); showTab('reto'); };
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),3800); }
+function renderChal(){ const s=ensureChal(), today=todaysChallenges();
+  const mi=new Date().getMonth(), mid='month_'+String(mi+1).padStart(2,'0'), msp=SPIRITS[mid];
+  const pct=Math.min(100,Math.round(s.pts/CHAL_GOAL*100)), got=owned(mid);
+  let html=`<div class="chal-month">
+     <div class="chal-mtop"><span>📅 ${MONTHS[mi]}</span><span>${s.pts}/${CHAL_GOAL} pts</span></div>
+     <div class="chal-bar"><i style="width:${pct}%"></i></div>
+     <div class="chal-prize ${got?'got':''}" id="chalPrize">${got?msp.em:'🔒'} ${got?'¡'+msp.nm+' conseguido!':'Premio: '+msp.nm}</div></div>
+     <h4 class="chal-h">Misiones de hoy</h4>`;
+  today.forEach((c,i)=>{ const cur=Math.min(c.g,s.prog[c.m]||0), done=s.done[i];
+    html+=`<div class="chal-item ${done?'done':''}"><span class="ci-t">${done?'✅':'⬜'} ${c.t}</span><span class="ci-p">${cur}/${c.g}</span></div>`; });
+  html+=`<p class="chal-note">Cada misión: +${CHAL_PTS} pts y +1 🪙. Llega a ${CHAL_GOAL} pts en el mes para ganar el espíritu dorado.</p>`;
+  $('chalView').innerHTML=html;
+  $('chalPrize').onclick=()=>openDetail(mid);
+}
+function updateTeaser(){ const el=$('dailyTeaser'); if(!el) return; const s=ensureChal();
+  const doneN=s.done.filter(Boolean).length, left=3-doneN;
+  el.querySelector('.dt-sub').textContent = doneN>=3 ? '✅ ¡Completaste las 3 misiones de hoy!' : `${left} misi${left===1?'ón':'ones'} por completar hoy · toca para ver`;
+  el.querySelector('.dt-badge').textContent = doneN>=3?'✓':String(left);
+  el.classList.toggle('done', doneN>=3); }
+$('dailyTeaser').onclick=()=>{ openSpirits(); showTab('reto'); };
+window.ZFupdateTeaser=updateTeaser;
+
+/* ---- racha diaria con fuego 🔥 ---- */
+function getFire(){ return parseInt(LS.getItem('zf_fire_count')||'0',10)||0; }
+function updateFire(){ const n=getFire(), a=$('fireTop'), b=$('fireHub');
+  if(a){ a.textContent='🔥 '+n; a.classList.toggle('lit',n>0); }
+  if(b){ b.textContent='🔥 '+n; b.classList.toggle('lit',n>0); } }
+function fireAction(){ const today=dstr(new Date());
+  if(LS.getItem('zf_fire_last')===today){ updateFire(); return; }
+  let n=getFire(); const y=new Date(); y.setDate(y.getDate()-1);
+  n = (LS.getItem('zf_fire_last')===dstr(y)) ? n+1 : 1;
+  LS.setItem('zf_fire_count',String(n)); LS.setItem('zf_fire_last',today);
+  if(n%5===0){ const bonus=n/5; addCoins(bonus); toastMsg('🔥 ¡Racha de '+n+' días!','Bonus: +'+bonus+' 🪙'); }
+  else toastMsg('🔥 Racha de '+n+(n===1?' día':' días'),'¡Vuelve mañana para no perderla!');
+  // hitos de racha -> espíritu del set de racha (ciclo cada 35 días, duplicados permitidos)
+  const MILE=[7,10,14,17,20,25,35], r=((n-1)%35)+1;
+  if(MILE.includes(r) && STREAK_IDS.length){
+    const id=STREAK_IDS[Math.floor(Math.random()*STREAK_IDS.length)], res=grantSpirit(id);
+    if(res.isNew) setTimeout(()=>toast(SPIRITS[id]),700);
+    else { addCoins(1); setTimeout(()=>toastMsg('🔁 '+SPIRITS[id].nm+' (repetido)','+1 🪙'),700); }
+  }
+  updateFire(); }
+window.ZFfire=fireAction;
+
+/* ---- TIENDA de espíritus (5 aleatorios, precio por rareza) ---- */
+const SHOP_PRICE={comun:3,uncommon:6,rare:12,epic:25,legendario:50,mistico:120};
+function shopState(){ try{ return JSON.parse(LS.getItem('zf_shop')||'{}'); }catch(e){ return {}; } }
+function saveShop(s){ try{ LS.setItem('zf_shop',JSON.stringify(s)); }catch(e){} }
+function pickShop(seedStr){ let r=0; for(const ch of seedStr) r=(r*31+ch.charCodeAt(0))>>>0;
+  const rnd=()=>{ r=(r*9301+49297)%233280; return r/233280; };
+  const pool=LOTTO_IDS.slice(), out=[];
+  for(let i=0;i<5 && pool.length;i++){ out.push(pool.splice(Math.floor(rnd()*pool.length),1)[0]); }
+  return out; }
+function ensureShop(){ const s=shopState(), dk=dstr(new Date());
+  if(s.day!==dk || !Array.isArray(s.ids) || s.ids.length!==5){ s.day=dk; s.nonce=0; s.ids=pickShop(dk); s.bought=[false,false,false,false,false]; saveShop(s); }
+  return s; }
+function renderShop(){ const s=ensureShop();
+  let h='<div class="shop-top"><span>🛒 5 figuritas de hoy</span><button class="shop-ref" id="shopRef">🔄 Renovar · 5🪙</button></div><div class="shop-list">';
+  s.ids.forEach((id,i)=>{ const sp=SPIRITS[id]; if(!sp) return; const price=SHOP_PRICE[sp.rar], bought=s.bought[i], own=owned(id);
+    h+=`<div class="shop-item r-${sp.rar}${bought?' sold':''}" data-i="${i}">
+      <span class="shop-em" data-i="${i}">${sp.em}</span>
+      <span class="shop-info"><b>${sp.nm}</b><span class="shop-rar">${RARNAME[sp.rar]}${own?' · ✔ ya lo tienes':''}</span></span>
+      <button class="shop-buy" data-i="${i}" ${bought?'disabled':''}>${bought?'✔':('🪙 '+price)}</button></div>`; });
+  h+='</div><p class="shop-note">5 figuritas aleatorias cada día; el precio sube con la rareza (común '+SHOP_PRICE.comun+' → místico '+SHOP_PRICE.mistico+' 🪙). Se permiten repetidas. Toca una figurita para ver su carta.</p>';
+  $('shopView').innerHTML=h;
+  $('shopRef').onclick=()=>{ const c=getCoins(); if(c<5){ toastMsg('Monedas insuficientes','Necesitas 5 🪙 para renovar'); return; }
+    setCoins(c-5); const st=ensureShop(); st.nonce=(st.nonce||0)+1; st.ids=pickShop(dstr(new Date())+'#'+st.nonce); st.bought=[false,false,false,false,false]; saveShop(st); renderShop(); };
+  $('shopView').querySelectorAll('.shop-buy').forEach(b=>b.onclick=()=>buyShop(+b.dataset.i));
+  $('shopView').querySelectorAll('.shop-em').forEach(e=>e.onclick=()=>openDetail(ensureShop().ids[+e.dataset.i]));
+}
+function buyShop(i){ const s=ensureShop(), id=s.ids[i], sp=SPIRITS[id]; if(!sp||s.bought[i]) return;
+  const price=SHOP_PRICE[sp.rar], c=getCoins();
+  if(c<price){ toastMsg('Monedas insuficientes','Te faltan '+(price-c)+' 🪙'); return; }
+  setCoins(c-price); grantSpirit(id); s.bought[i]=true; saveShop(s); toast(sp); renderShop(); }
+window.ZFrenderShop=renderShop;
+
+/* ---- tiempo jugado ---- */
+function getPlay(){ return parseInt(LS.getItem('zf_playtime')||'0',10)||0; }
+function fmtPlay(s){ const h=Math.floor(s/3600), m=Math.floor(s%3600/60), ss=s%60;
+  if(h) return `${h} h ${m} min`; if(m) return `${m} min ${ss} s`; return `${ss} s`; }
+function updatePlay(){ const a=$('playTime'); if(a) a.textContent='⏱ Tiempo jugado: '+fmtPlay(getPlay());
+  const b=$('playTimeHub'); if(b) b.textContent='⏱ Tiempo jugado: '+fmtPlay(getPlay()); }
+setInterval(()=>{ if(!document.hidden){ try{ LS.setItem('zf_playtime',String(getPlay()+1)); }catch(e){} updatePlay();
+  if(!$('title').classList.contains('hidden')){ updateTeaser(); updateFire(); } } },1000);
+window.ZFupdatePlay=updatePlay;
+
+/* ---- init ---- */
+updateCoins(); updateBet(); updatePlay(); updateTeaser(); updateFire();
+setTimeout(tryDaily,1200);
+})();
 </script>
 </body>
 </html>
