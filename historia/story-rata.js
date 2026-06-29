@@ -19,15 +19,44 @@
    ============================================================ */
 
 const StoryRata = {
-  start: 'intro_run',
+  start: 'myth_1',
   scenes: {
+
+    /* ============ PRÓLOGO — EL MITO DEL ZODIACO ============ */
+
+    myth_1: {
+      type: 'narration',
+      bg: 'radial-gradient(120% 90% at 50% 18%, #ffd86b 0%, #b8860b 30%, #3a2a05 70%, #140d02 100%)',
+      text: 'Hace mil años, cuando el tiempo aún no tenía nombre, el Emperador de Jade —señor del cielo— miró el mundo y vio puro caos. Decidió ponerle orden.',
+      next: 'myth_2',
+    },
+    myth_2: {
+      speaker: 'Emperador de Jade',
+      nameColor: 'gold',
+      portrait: { emoji: '👑', color: '#c9a227', side: 'right' },
+      bg: 'radial-gradient(120% 90% at 50% 18%, #ffe9a8 0%, #c9a227 32%, #3a2a05 72%, #140d02 100%)',
+      text: '"Doce bestias guardarán los años, y el cielo llevará sus nombres por toda la eternidad. ¿Quiénes serán dignas? *(alza la mano)* Que lo decida una carrera."',
+      next: 'myth_3',
+    },
+    myth_3: {
+      type: 'narration',
+      bg: 'linear-gradient(180deg,#2a1a3a,#5a2a4a,#27496d)',
+      text: 'Así nació la Gran Carrera. Una sola regla: cruzar el río salvaje del fin del mundo. Los primeros DOCE en llegar tendrían un año eterno con su nombre. Los demás... serían olvidados.',
+      next: 'myth_4',
+    },
+    myth_4: {
+      type: 'narration',
+      bg: 'linear-gradient(180deg,#1b3a5c,#27496d)',
+      text: 'Desde cada rincón del reino llegaron las bestias: el Tigre con su furia, el Dragón con sus alas, el Buey con su paciencia de montaña. Cien corazones. Doce lugares. Y, escondida en la hierba, la más pequeña de todas afilaba la única arma que tenía: la astucia.',
+      next: 'intro_run',
+    },
 
     /* ============ ACTO 1 — LA SALIDA ============ */
 
     intro_run: {
       type: 'narration',
       bg: 'linear-gradient(180deg,#0d2137,#1b3a5c)',
-      text: 'Amanece sobre el reino. Cien animales se empujan en la línea de salida, todos con los ojos puestos en el mismo premio: doce lugares en el zodiaco eterno. El cañón truena. Y empieza el caos.',
+      text: 'Amanece. Cien animales se empujan en la línea de salida, todos con los ojos puestos en el mismo premio. El cañón del Emperador truena sobre el valle. Y empieza el caos.',
       next: 'rata_intro',
     },
 

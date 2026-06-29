@@ -141,6 +141,45 @@
 .vn-name.c-water{ background:var(--vn-water); box-shadow:0 4px 0 var(--vn-water-sh); }
 .vn-name.c-green{ background:var(--vn-green); box-shadow:0 4px 0 var(--vn-green-sh); }
 .vn-name.c-gold{ background:var(--vn-gold); box-shadow:0 4px 0 var(--vn-gold-sh); color:#3a2c00; }
+
+/* ---------- Burbuja de cómic (diálogo de personaje) ---------- */
+.hidden-box{ display:none !important; }
+.vn-bubble{
+  position:absolute; z-index:4; cursor:pointer;
+  max-width:min(520px,48vw);
+  background:var(--vn-paper); color:var(--vn-ink);
+  border:3px solid var(--vn-ink); border-radius:22px;
+  padding:16px 20px 12px;
+  box-shadow:0 9px 0 rgba(0,0,0,.16), 0 16px 30px rgba(0,0,0,.4);
+  font-size:clamp(15px,2.3vw,21px); line-height:1.45;
+  animation:vnPop .22s cubic-bezier(.2,.9,.3,1.5) both;
+}
+.vn-bubble[hidden]{ display:none; }
+.vn-bubble.side-left{ left:23%; right:auto; bottom:42%; }
+.vn-bubble.side-right{ right:23%; left:auto; bottom:42%; }
+@keyframes vnPop{ from{ transform:scale(.7); opacity:0; } to{ transform:scale(1); opacity:1; } }
+/* cola del bocadillo apuntando al personaje */
+.vn-bubble::after{ content:''; position:absolute; bottom:-24px; border:13px solid transparent; }
+.vn-bubble::before{ content:''; position:absolute; bottom:-19px; border:11px solid transparent; z-index:1; }
+.vn-bubble.side-left::after{ left:40px; border-top-color:var(--vn-ink); }
+.vn-bubble.side-left::before{ left:42px; border-top-color:var(--vn-paper); }
+.vn-bubble.side-right::after{ right:40px; border-top-color:var(--vn-ink); }
+.vn-bubble.side-right::before{ right:42px; border-top-color:var(--vn-paper); }
+.vn-bubble-name{
+  display:inline-block; margin:-26px 0 8px -4px;
+  background:var(--vn-red); color:#fff; font-weight:800; font-size:14px; letter-spacing:.5px;
+  padding:5px 14px; border-radius:10px; box-shadow:0 3px 0 var(--vn-red-sh);
+}
+.vn-bubble.c-water .vn-bubble-name{ background:var(--vn-water); box-shadow:0 3px 0 var(--vn-water-sh); }
+.vn-bubble.c-green .vn-bubble-name{ background:var(--vn-green); box-shadow:0 3px 0 var(--vn-green-sh); }
+.vn-bubble.c-gold .vn-bubble-name{ background:var(--vn-gold); box-shadow:0 3px 0 var(--vn-gold-sh); color:#3a2c00; }
+.vn-bubble.c-ink .vn-bubble-name{ background:var(--vn-ink); }
+.vn-bubble-cont{ text-align:right; opacity:.55; font-size:15px; margin-top:2px; }
+@media (max-width:760px){
+  .vn-bubble{ max-width:64vw; font-size:15px; }
+  .vn-bubble.side-left{ left:14%; bottom:46%; }
+  .vn-bubble.side-right{ right:14%; bottom:46%; }
+}
 .vn-name.c-ink{ background:var(--vn-ink2); box-shadow:0 4px 0 #1c2638; }
 
 .vn-text{

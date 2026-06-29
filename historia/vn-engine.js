@@ -185,6 +185,11 @@
           <div class="vn-hill h3"><svg viewBox="0 0 1200 160" preserveAspectRatio="none"><path d="M0,160 L0,120 Q250,150 500,115 T1000,120 T1200,110 L1200,160 Z"/></svg></div>
         </div>
         <div class="vn-portrait side-left" hidden></div>
+        <div class="vn-bubble side-left" hidden>
+          <div class="vn-bubble-name"></div>
+          <div class="vn-bubble-text"></div>
+          <div class="vn-bubble-cont" hidden>▼</div>
+        </div>
         <div class="vn-box">
           <div class="vn-name" hidden></div>
           <div class="vn-choices" hidden></div>
@@ -220,15 +225,20 @@
         puzzle: root.querySelector('.vn-puzzle'),
         text: root.querySelector('.vn-text'),
         continue: root.querySelector('.vn-continue'),
+        bubble: root.querySelector('.vn-bubble'),
+        bubbleName: root.querySelector('.vn-bubble-name'),
+        bubbleText: root.querySelector('.vn-bubble-text'),
+        bubbleCont: root.querySelector('.vn-bubble-cont'),
       };
     }
 
     _bindEvents() {
-      this.el.box.addEventListener('click', (e) => {
-        // si el click vino de un botón de elección/puzzle, no avanzar la caja
+      const tap = (e) => {
         if (e.target.closest('.vn-choice-btn, .vn-puzzle-opt')) return;
         this._onBoxTap();
-      });
+      };
+      this.el.box.addEventListener('click', tap);
+      this.el.bubble.addEventListener('click', tap);
     }
 
     _onBoxTap() {
@@ -249,33 +259,42 @@
       this._setBackground(scene.bg);
       this._setPortrait(scene.portrait);
 
-      // nombre
-      if (scene.speaker) {
-        this.el.name.hidden = false;
-        this.el.name.textContent = scene.speaker;
-        this.el.name.className = 'vn-name c-' + (scene.nameColor || 'red');
-        this.el.box.classList.remove('narration');
-      } else {
-        this.el.name.hidden = true;
-        this.el.box.classList.add('narration');
-      }
+      const speaking = !!scene.speaker;
+      const hasDecision = (isPuzzle && scene.options && scene.options.length) ||
+                          (scene.choices && scene.choices.length);
 
-      this.el.choices.hidden = true;
-      this.el.choices.innerHTML = '';
-      this.el.puzzle.hidden = true;
-      this.el.puzzle.innerHTML = '';
+      // reset
+      this.el.choices.hidden = true; this.el.choices.innerHTML = '';
+      this.el.puzzle.hidden = true; this.el.puzzle.innerHTML = '';
       this.el.continue.hidden = true;
+      this.el.bubble.hidden = true;
+      this.el.bubbleCont.hidden = true;
 
       const text = this._resolve(scene.text) || '';
-      this._typeText(text, () => {
-        if (isPuzzle && scene.options && scene.options.length) {
-          this._showPuzzle(scene);
-        } else if (scene.choices && scene.choices.length) {
-          this._showChoices(scene.choices);
-        } else if (scene.next) {
-          this.el.continue.hidden = false;
-        }
-      });
+      const afterType = () => {
+        if (isPuzzle && scene.options && scene.options.length) this._showPuzzle(scene);
+        else if (scene.choices && scene.choices.length) this._showChoices(scene.choices);
+        else if (scene.next) { if (speaking) this.el.bubbleCont.hidden = false; else this.el.continue.hidden = false; }
+      };
+
+      if (speaking) {
+        // ---- diálogo de PERSONAJE: burbuja de cómic junto al retrato ----
+        const side = (scene.portrait && scene.portrait.side) || 'left';
+        this.el.bubble.className = 'vn-bubble side-' + side + ' c-' + (scene.nameColor || 'red');
+        this.el.bubbleName.textContent = scene.speaker;
+        this.el.bubble.hidden = false;
+        this.el.name.hidden = true;
+        this.el.text.textContent = '';
+        this.el.box.classList.remove('narration');
+        this.el.box.classList.toggle('hidden-box', !hasDecision); // sin decisión: oculta la caja inferior
+        this._typeText(text, afterType, this.el.bubbleText);
+      } else {
+        // ---- NARRADOR: caja inferior ----
+        this.el.box.classList.remove('hidden-box');
+        this.el.box.classList.add('narration');
+        this.el.name.hidden = true;
+        this._typeText(text, afterType);
+      }
     }
 
     _showChoices(choices) {
@@ -480,17 +499,19 @@
       }
     }
 
-    _typeText(text, onDone) {
+    _typeText(text, onDone, target) {
+      const tgt = target || this.el.text;
+      this._typeTarget = tgt;
       this._fullText = text;
       this._typing = true;
-      this.el.text.textContent = '';
+      tgt.textContent = '';
       clearTimeout(this._typeTimer);
 
       let i = 0;
       const step = () => {
         if (!this._typing) return; // se completó manualmente
         i++;
-        this.el.text.textContent = text.slice(0, i);
+        tgt.textContent = text.slice(0, i);
         if (i >= text.length) {
           this._typing = false;
           if (onDone) onDone();
@@ -506,7 +527,7 @@
     _finishTyping() {
       clearTimeout(this._typeTimer);
       this._typing = false;
-      this.el.text.textContent = this._fullText;
+      (this._typeTarget || this.el.text).textContent = this._fullText;
       if (this._pendingDone) {
         const done = this._pendingDone;
         this._pendingDone = null;

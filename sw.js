@@ -1,24 +1,29 @@
-/* Zodiac Fighters - service worker mínimo (offline + instalable) */
-const CACHE = 'zf-v1';
+/* Zodiac Fighters - service worker (offline + instalable)
+   v3: network-first para que SIEMPRE se vean los cambios al subir; cae a caché si no hay red. */
+const CACHE = 'zf-v3';
 const ASSETS = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
   self.skipWaiting();
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS).catch(() => {})));
 });
+
 self.addEventListener('activate', e => {
-  e.waitUntil(self.clients.claim());
+  e.waitUntil(
+    caches.keys().then(keys => Promise.all(
+      keys.filter(k => k !== CACHE).map(k => caches.delete(k))   // borra cachés viejos
+    )).then(() => self.clients.claim())
+  );
 });
+
+/* network-first: intenta la red (versión fresca); si falla, usa caché. */
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.open(CACHE).then(cache =>
-      cache.match(e.request).then(cached =>
-        cached || fetch(e.request).then(resp => {
-          try { cache.put(e.request, resp.clone()); } catch (_) {}
-          return resp;
-        }).catch(() => cached)
-      )
-    )
+    fetch(e.request).then(resp => {
+      const copy = resp.clone();
+      caches.open(CACHE).then(c => { try { c.put(e.request, copy); } catch (_) {} });
+      return resp;
+    }).catch(() => caches.match(e.request))
   );
 });

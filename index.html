@@ -136,7 +136,12 @@
     transition:transform .04s linear; pointer-events:none; }
   #stick.act #stickThumb{ filter:brightness(1.2); }
   #stick.act #stickBaseEl{ opacity:1; }
-  #abtns{ position:fixed; z-index:9; right:max(10px,env(safe-area-inset-right)); bottom:max(10px,env(safe-area-inset-bottom)); width:150px; height:140px; opacity:.85; }
+  #abtns{ position:fixed; z-index:9; right:max(10px,env(safe-area-inset-right)); bottom:max(10px,env(safe-area-inset-bottom)); width:210px; height:140px; opacity:.85; }
+  .bP{ width:54px; height:54px; right:124px; bottom:8px; font-size:26px; color:#3a2a00; background:radial-gradient(circle at 35% 30%,#fff0b0,#d99a00); box-shadow:0 4px 0 #8a6200, inset 0 2px 4px rgba(255,255,255,.45); }
+  .bP.rdy{ animation:bpPulse .7s infinite; }
+  @keyframes bpPulse{ 0%,100%{ box-shadow:0 4px 0 #8a6200, 0 0 0 0 rgba(255,80,80,.6);} 50%{ box-shadow:0 4px 0 #8a6200, 0 0 0 10px rgba(255,80,80,0);} }
+  #cineVid{ position:fixed; inset:0; width:100%; height:100%; object-fit:cover; z-index:8; background:#000; pointer-events:none; }
+  #cineVid.hidden{ display:none; }
   .rbtn{ position:absolute; border:none; border-radius:50%; font-weight:900; color:#fff; pointer-events:auto; touch-action:none; -webkit-user-select:none; user-select:none; display:flex; align-items:center; justify-content:center; }
   .bA{ width:58px; height:58px; right:6px; bottom:6px; font-size:24px; background:radial-gradient(circle at 35% 30%,#e2607a,#9d2235); box-shadow:0 4px 0 #6e1825, inset 0 2px 4px rgba(255,255,255,.35); }
   .bB{ width:50px; height:50px; right:64px; bottom:42px; font-size:21px; background:radial-gradient(circle at 35% 30%,#54b39a,#2e6e5e); box-shadow:0 4px 0 #1d4a3f, inset 0 2px 4px rgba(255,255,255,.35); }
@@ -202,6 +207,13 @@
   #fallPrompt .fp-card h2{ margin:0 0 6px; color:#ff6b6b; }
   #fallPrompt .fp-row{ display:flex; gap:10px; margin-top:14px; }
   #fallPrompt .fp-row .btn{ flex:1; }
+  /* ranking */
+  .rank-row{ display:flex; align-items:center; gap:10px; background:#1b1940; border:1px solid #2c2a55; border-radius:10px; padding:9px 12px; margin-bottom:6px; }
+  .rank-row.me{ border-color:#ffd86b; background:#2a2410; box-shadow:0 0 12px -2px rgba(255,216,107,.6); }
+  .rank-row .rk-pos{ font-weight:900; color:#ffd86b; min-width:42px; }
+  .rank-row .rk-name{ flex:1; font-weight:700; color:#e8ecff; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .rank-row .rk-time{ font-weight:800; color:#9fb0ff; font-variant-numeric:tabular-nums; }
+  .rank-row.top1 .rk-pos{ color:#ffd700; } .rank-row.top2 .rk-pos{ color:#c0c0c0; } .rank-row.top3 .rk-pos{ color:#cd7f32; }
 
   /* ===================== HUB DE ESPÍRITUS ===================== */
   #spirits .panel{ max-width:760px; width:94%; max-height:90vh; overflow:hidden; display:flex; flex-direction:column;
@@ -426,11 +438,13 @@
   </div>
 </div>
 <div id="abtns">
+  <button id="bP" class="rbtn bP">✦</button>
   <button id="bGrab" class="rbtn bGrab">✊</button>
   <button id="bJump" class="rbtn bJump">⤒</button>
   <button id="bB" class="rbtn bB">B</button>
   <button id="bA" class="rbtn bA">A</button>
 </div>
+<video id="cineVid" class="hidden" playsinline muted></video>
 
 <div id="intro">
   <div class="intro-shine"></div>
@@ -470,6 +484,7 @@
     <h1 class="galaxy-title">ZODIAC FIGHTERS</h1>
     <h2 class="galaxy-sub">Los 12 del Zodiaco</h2>
     <button class="btn" id="modeFight">⚔️ Pelea vs CPU</button>
+    <button class="btn alt" id="modeTraining">🥊 Modo Libre (probar)</button>
     <button class="btn alt" id="modeTowers">🏯 Torres</button>
     <button class="btn alt" id="modeTarget">🎯 Target Test</button>
     <button class="btn alt" id="modeStory">📖 Modo Historia</button>
@@ -591,6 +606,7 @@
     <button class="btn" id="fightBtn" disabled style="opacity:.5">¡Pelear!</button>
     <button class="btn ghost" id="randBtn">CPU al azar</button>
     <button class="btn alt" id="targetBtn" disabled style="opacity:.5">🎯 ¡Empezar!</button>
+    <button class="btn ghost" id="rankViewBtn" style="display:none">🏆 Ver ranking</button>
     <button class="btn" id="towerStartBtn" disabled style="opacity:.5;display:none">🏯 ¡Comenzar Torre!</button>
     <button class="btn ghost" id="backMenu">‹ Menú</button>
   </div>
@@ -622,9 +638,24 @@
       <p id="endUnlockText" style="margin:0 0 8px;color:#5a23c8"></p>
       <button class="btn spirit" id="endSeeSpirit" style="padding:8px 16px;font-size:14px">✨ Ver espíritu</button>
     </div>
+    <button class="btn spirit" id="endRank" style="display:none">🏆 Subir mi tiempo / Ranking</button>
     <button class="btn" id="rematch">Revancha</button>
     <button class="btn alt" id="changeChar">Cambiar peleador</button>
     <button class="btn ghost" id="endMenu">🏠 Menú principal</button>
+  </div>
+</div>
+
+<!-- ===== Ranking del Target Test ===== -->
+<div id="rankBoard" class="overlay hidden">
+  <div class="panel">
+    <h2 id="rankTitle">🏆 Ranking</h2>
+    <p id="rankCongrats" class="hidden" style="color:#ffd86b;font-weight:800"></p>
+    <div id="rankEntry" class="hidden">
+      <input id="rankName" maxlength="14" placeholder="Escribe tu nombre" style="width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1px solid #46324a;background:#1b1940;color:#fff;font-size:15px;font-weight:700;margin-bottom:8px">
+      <button class="btn" id="rankSave">Guardar mi tiempo</button>
+    </div>
+    <div id="rankList" style="max-height:46vh;overflow-y:auto;margin:8px 0"></div>
+    <button class="btn ghost" id="rankClose">Cerrar</button>
   </div>
 </div>
 
@@ -779,8 +810,8 @@ function jingle(type){ const a=ac(); if(!a||muted) return; const t=a.currentTime
 }
 
 /* ---------- input: táctil (stick virtual + botones) y teclado ---------- */
-const touchIn={dx:0,dy:0,a:false,b:false,g:false,j:false};
-const keyIn={dx:0,dy:0,a:false,b:false,g:false,j:false};
+const touchIn={dx:0,dy:0,a:false,b:false,g:false,j:false,pw:false};
+const keyIn={dx:0,dy:0,a:false,b:false,g:false,j:false,pw:false};
 const keys={};
 addEventListener('keydown',e=>{ keys[e.code]=true; if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault(); });
 addEventListener('keyup',e=>{ keys[e.code]=false; });
@@ -788,6 +819,7 @@ function readKeys(){
   keyIn.dx=(keys.ArrowRight?1:0)-(keys.ArrowLeft?1:0);
   keyIn.dy=(keys.ArrowDown?1:0)-(keys.ArrowUp?1:0);
   keyIn.a=!!keys.KeyA; keyIn.b=!!keys.KeyS; keyIn.g=!!keys.KeyX; keyIn.j=!!(keys.Space||keys.ArrowUp);
+  keyIn.pw=!!keys.KeyD; /* tecla D = botón de poder (también A+B juntos) */
 }
 /* stick flotante: mitad izquierda. Botones círculo: A, B, salto, agarre. */
 let stickId=null, stickBase=null, btnTouches={};
@@ -827,14 +859,35 @@ function endTouch(e){
 cv.addEventListener('touchend',endTouch); cv.addEventListener('touchcancel',endTouch);
 function mergedInput(){
   readKeys();
+  const a=keyIn.a||touchIn.a, b=keyIn.b||touchIn.b;
+  /* botón de poder: tecla D, botón táctil ✦, o A+B presionados juntos */
+  const pw = keyIn.pw||touchIn.pw||(a&&b);
   return { dx:Math.abs(keyIn.dx)>Math.abs(touchIn.dx)?keyIn.dx:touchIn.dx,
            dy:Math.abs(keyIn.dy)>Math.abs(touchIn.dy)?keyIn.dy:touchIn.dy,
-           a:keyIn.a||touchIn.a, b:keyIn.b||touchIn.b, g:keyIn.g||touchIn.g, j:keyIn.j||touchIn.j };
+           a, b, g:keyIn.g||touchIn.g, j:keyIn.j||touchIn.j, pw };
 }
 
 /* ============ SISTEMA DE COMBATE (GDD secciones 2-3) ============ */
 const GRAV=0.78, MATCH_TIME=600; /* 10 min máx según GDD */
 let projectiles=[], particles=[], hitstopT=0, shakeT=0, shakeM=0;
+
+/* ============================================================
+   CONFIG DE COMBATE — estilo MK / Street Fighter (ajustable)
+   Toca estos números para afinar el "feel" sin buscar en el código.
+   ============================================================ */
+const FEEL={
+  kbMul:0.52,      // multiplicador global de knockback (más bajo = MK/SF, menos vuelo)
+  popMul:0.45,     // empuje vertical al golpear (más bajo = combate pegado al suelo)
+  bounceMul:0.45,  // rebote contra los bordes (más suave que Smash)
+  shakeHit:3.2,    // temblor en golpe normal
+  shakeHeavy:8,    // temblor en golpe fuerte
+};
+/* Estamina / FURIA: se carga agachándose (↓) y al pegar/recibir */
+const FURIA_MAX=100, FURIA_AGACHA=46/* por seg manteniendo ↓ */, FURIA_PEGAR=7, FURIA_RECIBIR=5, FURIA_EX=50/* costo del golpe fuerte */;
+/* Súper finisher: aparece cuando TU vida baja a este % */
+const SUPER_HP=0.15, SUPER_DMG_FRAC=0.45/* daño = % de la vida máx del rival */, EX_DMG_FRAC=0.20;
+/* estado de la cinemática (congela la pelea mientras corre) */
+let cine={active:false, kind:null, t:0, dur:0, att:null, foe:null, dealt:false, dmg:0, willKO:false};
 /* modo Rompe Blancos (Target Test) */
 let PLATFORMS=[], targets=[], targetTimer=0, targetTotal=10;
 let GROUND_SOLID=null;   // null = suelo completo (pelea). En Target Test: segmentos sólidos [[x1,x2],...]; el resto es vacío mortal.
@@ -851,10 +904,10 @@ function spawnParticles(x,y,col,n,pow){
 /* definición de movimientos normales (escalados por dmg del personaje) */
 function moveDef(f,kind,dir){
   const d=f.ch.st.dmg, base={
-    jab:   {dmg:5*d, st:.07,act:.10,rec:.16, rng:40, ang:-.15, kb:1,  anim:'jab'},
-    ftilt: {dmg:8*d, st:.10,act:.10,rec:.22, rng:52, ang:-.25, kb:1.2,anim:'lunge'},
-    utilt: {dmg:7*d, st:.09,act:.12,rec:.20, rng:46, ang:-1.1, kb:1.1,anim:'up',   hi:true},
-    dtilt: {dmg:6*d, st:.08,act:.10,rec:.18, rng:48, ang:-.05, kb:.9, anim:'low',  lo:true},
+    jab:   {dmg:5*d, st:.07,act:.10,rec:.16, rng:40, ang:-.15, kb:1,  anim:'jab',  chainable:true},
+    ftilt: {dmg:8*d, st:.10,act:.10,rec:.22, rng:52, ang:-.25, kb:1.2,anim:'lunge',chainable:true},
+    utilt: {dmg:7*d, st:.09,act:.12,rec:.20, rng:46, ang:-1.1, kb:1.1,anim:'up',   hi:true, chainable:true},
+    dtilt: {dmg:6*d, st:.08,act:.10,rec:.18, rng:48, ang:-.05, kb:.9, anim:'low',  lo:true, chainable:true},
     fsmash:{dmg:17*d,st:.22,act:.12,rec:.34, rng:60, ang:-.35, kb:1.7,anim:'lunge',kd:true,smash:true},
     usmash:{dmg:16*d,st:.20,act:.12,rec:.32, rng:52, ang:-1.2, kb:1.6,anim:'up',   kd:true,smash:true,hi:true},
     dsmash:{dmg:15*d,st:.20,act:.12,rec:.32, rng:55, ang:-.1,  kb:1.6,anim:'low',  kd:true,smash:true,lo:true},
@@ -877,7 +930,9 @@ class Fighter{
     this.jumps=2; this.recUsed=false; this.charging=0; this.chargeDir=0;
     this.crumple=0; this.buffAtk=0; this.buffDef=0; this.counterT=0; this.evadeT=0;
     this.poisonT=0; this.burnT=0; this.dotTick=0; this.stunFlash=0;
-    this.comboOn=0; this.lastIn={a:false,b:false,g:false,j:false};
+    this.comboOn=0; this.lastIn={a:false,b:false,g:false,j:false,pw:false};
+    this.furia=0; this.superUsed=false; this.hitFlash=0; this.exGlow=0;
+    this.cmdBuf=[]; this._la=false; this.chain=0; this.chainQ=false; this.lastDir='N'; this.cmdFlash=0; this.cmdName='';
     this.anim=0; this.kdT=0; this.invT=0; this.armor=false; this.blocking=false;
     this.ai={t:0, act:'idle', dir:0, atkCd:1};
     this.hist=[];
@@ -887,6 +942,16 @@ class Fighter{
 
   update(dt,inp){
     this.anim+=dt; this.stT+=dt;
+    /* flanco global del botón A (vale en cualquier estado: cancelar a cadena o a especial) */
+    const aEdgeG = inp.a && !this._la; this._la = inp.a;
+    if(this.cmdFlash>0) this.cmdFlash-=dt;
+    /* buffer de comandos direccionales relativo a tu orientación (movimientos tipo MK) */
+    { let cd='N';
+      if(inp.dy<-0.4) cd='U'; else if(inp.dy>0.4) cd='D';
+      else if(inp.dx*this.face>0.4) cd='F'; else if(inp.dx*this.face<-0.4) cd='B';
+      if(cd!=='N' && cd!==this.lastDir){ this.cmdBuf.push({d:cd,t:this.anim}); if(this.cmdBuf.length>10) this.cmdBuf.shift(); }
+      this.lastDir=cd;
+    }
     if(this.crumple>0) this.crumple-=dt;
     if(this.buffAtk>0) this.buffAtk-=dt;
     if(this.buffDef>0) this.buffDef-=dt;
@@ -894,6 +959,8 @@ class Fighter{
     if(this.evadeT>0) this.evadeT-=dt;
     if(this.invT>0) this.invT-=dt;
     if(this.stunFlash>0) this.stunFlash-=dt;
+    if(this.hitFlash>0) this.hitFlash-=dt;
+    if(this.exGlow>0) this.exGlow-=dt;
     /* veneno / quemadura (DOT) */
     if(this.poisonT>0||this.burnT>0){
       this.dotTick+=dt;
@@ -926,7 +993,22 @@ class Fighter{
       if(a.dash){ this.vx=this.face*a.dashV; this.armor=!!a.arm; }
       this.physics(dt, a.dash?1:.92);
       if(t>=a.st && t<a.st+a.act && !this.atkHit) this.tryHit(a);
-      if(t>=a.st+a.act+a.rec){ this.armor=false; this.setState('ctl'); }
+      /* CANCEL (combos tipo MK) con buffer de input: una nueva A durante el golpe se
+         "recuerda" y se ejecuta apenas se abre la ventana (tras el impacto). Si hay un
+         comando de movimiento cargado, cancela a especial; si no, encadena el siguiente golpe. */
+      if(a.chainable && !a.cine){
+        if(aEdgeG) this.chainQ=true;
+        if(this.chainQ && t>=a.st+a.act*0.5){
+          this.chainQ=false;
+          if(this.tryMotionSpecial()){ return; }
+          if(this.chain<4){ this.chain++;
+            const seq=['jab','jab','ftilt','ftilt'];
+            this.startAttack(moveDef(this,seq[Math.min(this.chain-1,seq.length-1)]));
+            return;
+          }
+        }
+      }
+      if(t>=a.st+a.act+a.rec){ this.armor=false; this.chain=0; this.chainQ=false; this.setState('ctl'); }
       return;
     }
 
@@ -936,6 +1018,10 @@ class Fighter{
     const dxIn=inp.dx, dyIn=inp.dy;
     /* bloqueo: en el suelo, sosteniendo atrás (GDD: escudo sin botón) */
     this.blocking = this.grounded && dxIn*back>0.35 && this.evadeT<=0;
+    /* FURIA: agacharse (↓ en el suelo, quieto) carga estamina */
+    this.crouching = this.grounded && dyIn>0.5 && Math.abs(dxIn)<.4 && this.evadeT<=0;
+    if(this.crouching){ this.furia=Math.min(FURIA_MAX,this.furia+FURIA_AGACHA*dt);
+      if(Math.random()<dt*9) spawnParticles(this.x+(Math.random()-.5)*20*S,GY-4*S,this.ch.col,1,.6); }
 
     /* movimiento horizontal */
     const spd=this.ch.st.spd*S*(this.grounded?1:this.ch.st.air);
@@ -950,8 +1036,12 @@ class Fighter{
     /* fast-fall */
     if(!this.grounded&&dyIn>.5&&this.vy>0) this.vy+=GRAV*S*1.2;
 
-    /* === ataques A: tap=tilt/jab/aéreo, mantener=smash cargado === */
-    if(inp.a&&!this.lastIn.a){ this.aT=0; this.aDir={x:dxIn,y:dyIn}; }
+    /* === ataques A: primero comando de movimiento (especial tipo MK); si no, tap=tilt/jab, mantener=smash === */
+    if(inp.a&&!this.lastIn.a){
+      this.chain=0; this.chainQ=false;
+      if(this.tryMotionSpecial()){ this.aT=null; }
+      else { this.aT=0; this.aDir={x:dxIn,y:dyIn}; }
+    }
     if(inp.a&&this.aT!==null&&this.aT!==undefined){ this.aT+=dt; if(this.aDir&&Math.hypot(dxIn,dyIn)>Math.hypot(this.aDir.x,this.aDir.y)) this.aDir={x:dxIn,y:dyIn}; }
     if(!inp.a&&this.lastIn.a&&this.aT!=null){
       const held=this.aT, d=this.aDir||{x:0,y:0}; this.aT=null;
@@ -986,9 +1076,16 @@ class Fighter{
     /* agarre */
     if(inp.g&&!this.lastIn.g&&this.grounded) this.startAttack(moveDef(this,'grab'));
 
+    /* === BOTÓN DE PODER (A+B juntos / botón ✦ / tecla D) ===
+       Si tu vida está al 15% → SÚPER finisher. Si tienes furia → GOLPE FUERTE (EX). */
+    if(inp.pw&&!this.lastIn.pw&&!cine.active){
+      if(this.superReady()) this.doSuper();
+      else if(this.furia>=FURIA_EX) this.doEX();
+    }
+
     this.physics(dt,.92);
     if(this.grounded){ this.jumps=Math.max(this.jumps,0); this.recUsed=false; if(this.vy>=0) this.jumps=2; }
-    this.lastIn={a:inp.a,b:inp.b,g:inp.g,j:inp.j};
+    this.lastIn={a:inp.a,b:inp.b,g:inp.g,j:inp.j,pw:inp.pw};
   }
 
   physics(dt,fric){
@@ -1014,8 +1111,8 @@ class Fighter{
     if(this.grounded) this.vx*=fric;
     /* rebote contra bordes (GDD: sin ring-out) */
     const m=this.w*.7;
-    if(this.x<m){ this.x=m; if(this.vx<-4*S&&(this.state==='hit')){ this.vx=-this.vx*.65; this.hitstun+=.08; this.crumple=.35; sfx('heavy'); spawnParticles(this.x,this.y-this.h*.5,'#fff',8,1.5); shakeT=.18; shakeM=6; } else if(this.vx<0) this.vx=0; }
-    if(this.x>W-m){ this.x=W-m; if(this.vx>4*S&&(this.state==='hit')){ this.vx=-this.vx*.65; this.hitstun+=.08; this.crumple=.35; sfx('heavy'); spawnParticles(this.x,this.y-this.h*.5,'#fff',8,1.5); shakeT=.18; shakeM=6; } else if(this.vx>0) this.vx=0; }
+    if(this.x<m){ this.x=m; if(this.vx<-4*S&&(this.state==='hit')){ this.vx=-this.vx*.65*FEEL.bounceMul; this.hitstun+=.08; this.crumple=.35; sfx('heavy'); spawnParticles(this.x,this.y-this.h*.5,'#fff',8,1.5); shakeT=.18; shakeM=6; } else if(this.vx<0) this.vx=0; }
+    if(this.x>W-m){ this.x=W-m; if(this.vx>4*S&&(this.state==='hit')){ this.vx=-this.vx*.65*FEEL.bounceMul; this.hitstun+=.08; this.crumple=.35; sfx('heavy'); spawnParticles(this.x,this.y-this.h*.5,'#fff',8,1.5); shakeT=.18; shakeM=6; } else if(this.vx>0) this.vx=0; }
   }
 
   setState(s){ this.state=s; this.stT=0; if(s==='ctl'){ this.kdPending=false; } }
@@ -1037,6 +1134,42 @@ class Fighter{
       const m={dmg:6*this.ch.st.dmg,st:.02,act:.18,rec:.1,rng:44,ang:-1.2,kb:1,anim:'up',air:true,hi:true,keepV:true};
       this.startAttack(m);
     }
+  }
+
+  /* ¿el buffer de direcciones contiene esta secuencia (subsecuencia, ventana 0.5s)? */
+  matchMotion(seq){
+    const now=this.anim, rec=this.cmdBuf.filter(e=>now-e.t<0.5).map(e=>e.d);
+    let i=0; for(const d of rec){ if(d===seq[i]) i++; if(i===seq.length) return true; }
+    return false;
+  }
+  /* comandos tipo MK con el botón A. Devuelve true si disparó un especial. */
+  tryMotionSpecial(){
+    if(!this.grounded) return false;
+    const sp=this.ch.sp;
+    if(this.matchMotion(['F','D','F'])){ this.cmdBuf=[]; this.cmdFlash=.6; this.cmdName='→↓→ '+(sp.d.name||''); this.special(sp.d,'d'); return true; } // DP
+    if(this.matchMotion(['D','B'])){    this.cmdBuf=[]; this.cmdFlash=.6; this.cmdName='↓← '+(sp.s.name||'');  this.special(sp.s,'s'); return true; } // cuarto de vuelta atrás
+    if(this.matchMotion(['D','F'])){    this.cmdBuf=[]; this.cmdFlash=.6; this.cmdName='↓→ '+(sp.n.name||'');  this.special(sp.n,'n'); return true; } // cuarto de vuelta adelante
+    return false;
+  }
+
+  /* ¿puede lanzar el SÚPER? (vida ≤ 15% y no usado aún) */
+  superReady(){ return ST.mode==='fight' && !cine.active && !this.superUsed && this.state!=='ko' && ((this.hp/this.maxhp)<=SUPER_HP || ST.gameMode==='training'); }
+
+  /* SÚPER finisher (A+B al 15%): golpe amplio; si conecta → cinemática épica + daño fuerte */
+  doSuper(){
+    this.exGlow=.9; this.stunFlash=.4; sfx('heavy'); camPunch(.08,.22);
+    spawnParticles(this.x,this.y-this.h*.6,'#ffd54a',22,2.2);
+    this.vx=this.face*5*S;
+    const d=this.ch.st.dmg;
+    this.startAttack({dmg:8*d, st:.14,act:.22,rec:.34, rng:92, ang:-.2, kb:1.6, anim:'lunge', area:true, cine:'super', kd:true});
+  }
+  /* GOLPE FUERTE (EX): cuesta furia; si conecta → mini-cinemática + daño */
+  doEX(){
+    this.furia=Math.max(0,this.furia-FURIA_EX); this.exGlow=.6; sfx('heavy');
+    spawnParticles(this.x,this.y-this.h*.6,this.ch.col,14,1.6);
+    this.vx=this.face*6*S;
+    const d=this.ch.st.dmg;
+    this.startAttack({dmg:6*d, st:.10,act:.18,rec:.30, rng:74, ang:-.25, kb:1.4, anim:'lunge', area:true, cine:'ex', kd:true});
   }
 
   special(sp,slot){
@@ -1104,6 +1237,8 @@ class Fighter{
 /* ---------- resolución de golpe: hitstop, hitstun, knockback, bloqueo, counter ---------- */
 function landHit(att,foe,a,dir){
   if(foe.invT>0||foe.state==='ko') return;
+  /* GOLPE FUERTE / SÚPER: dispara cinemática (ignora bloqueo y counter) */
+  if(a.cine){ startCine(a.cine,att,foe,dir); return; }
   /* counter (Rata/Conejo B↓) */
   if(foe.counterT>0){
     foe.counterT=0; sfx('heavy');
@@ -1132,10 +1267,14 @@ function applyDamage(att,foe,a,dir){
   foe.hp=Math.max(0,foe.hp-dmg);
   /* hitstop: 2-4 frames (GDD) */
   hitstopT=Math.max(hitstopT, dmg>=14?.07:.045);
-  /* knockback proporcional (GDD) */
-  const kb=(2.2+dmg*.42)*(a.kb||1)*S/Math.max(.8,foe.ch.st.sc);
+  /* knockback estilo MK/SF: más contenido y pegado al suelo (ver FEEL arriba) */
+  const kb=(2.2+dmg*.42)*(a.kb||1)*S/Math.max(.8,foe.ch.st.sc)*FEEL.kbMul;
   const ang=a.ang!==undefined?a.ang:-.3;
-  foe.vx=Math.cos(ang)*kb*dir; foe.vy=Math.sin(ang)*kb-(a.stun?0:2*S);
+  foe.vx=Math.cos(ang)*kb*dir; foe.vy=(Math.sin(ang)*kb-(a.stun?0:2*S))*FEEL.popMul;
+  /* FURIA: atacante gana al pegar, el golpeado gana algo al recibir */
+  att.furia=Math.min(FURIA_MAX,att.furia+FURIA_PEGAR);
+  foe.furia=Math.min(FURIA_MAX,foe.furia+FURIA_RECIBIR);
+  foe.hitFlash=Math.max(foe.hitFlash, dmg>=12?.30:.18);
   /* hitstun proporcional al daño (GDD) */
   foe.hitstun=a.stun? .9 : .12+dmg*.022;
   foe.kdPending=!!a.kd&&dmg>=10;
@@ -1145,8 +1284,8 @@ function applyDamage(att,foe,a,dir){
   /* el atacante retrocede: debe re-aproximarse, no quedarse pegado spameando */
   if(!a.dash) att.vx -= att.face*3.4*S;
   /* arruga de papel en golpes fuertes (GDD sección 3) */
-  if(dmg>=12){ foe.crumple=.4; shakeT=.15; shakeM=5; sfx('heavy'); }
-  else sfx('hit');
+  if(dmg>=12){ foe.crumple=.4; shakeT=Math.max(shakeT,.18); shakeM=FEEL.shakeHeavy; sfx('heavy'); }
+  else { shakeT=Math.max(shakeT,.08); shakeM=Math.max(shakeM,FEEL.shakeHit); sfx('hit'); }
   if(a.psn) foe.poisonT=3;
   if(a.burn) foe.burnT=2;
   if(a.stun) foe.stunFlash=.9;
@@ -1161,6 +1300,13 @@ function applyDamage(att,foe,a,dir){
   if(foe.hp<=0){ koFighter(foe,dir,kb); }
 }
 function koFighter(foe,dir,kb){
+  /* MODO LIBRE: el muñeco no muere — se reinicia con vida llena para seguir probando */
+  if(ST.gameMode==='training'){
+    foe.hp=foe.maxhp; foe.setState('ctl'); foe.vx=0; foe.vy=0; foe.crumple=0;
+    foe.invT=.4; foe.hitstun=0; foe.furia=0; foe.superUsed=false;
+    spawnParticles(foe.x,foe.y-foe.h*.5,'#fff',14,1.6); sfx('jump');
+    return;
+  }
   foe.setState('ko'); foe.vx=dir*kb*1.3; foe.vy=-9*S; foe.crumple=1.2;
   sfx('ko'); shakeT=.4; shakeM=10; hitstopT=.18;
   spawnParticles(foe.x,foe.y-foe.h*.5,'#fff',20,2.5);
@@ -1194,10 +1340,16 @@ function diffParams(d){
            mistake:L(.42,0), smash:L(.10,.34), recov:L(.04,.9) };
 }
 function aiInput(c,dt){
+  /* MODO LIBRE: el muñeco se queda quieto (solo mira al jugador) */
+  if(ST.gameMode==='training') return {dx:0,dy:0,a:false,b:false,g:false,j:false,pw:false};
   const ai=c.ai, foe=c.foe, dist=Math.abs(foe.x-c.x), toFoe=Math.sign(foe.x-c.x)||1;
   const P=diffParams(CPU_D);
   ai.t-=dt; ai.atkCd-=dt;
-  const inp={dx:0,dy:0,a:false,b:false,g:false,j:false};
+  const inp={dx:0,dy:0,a:false,b:false,g:false,j:false,pw:false};
+  /* SÚPER de la CPU: si está al 15%, se lanza hacia el rival y aprieta el poder */
+  if(c.superReady&&c.superReady()){ if(dist<170*S){ inp.dx=toFoe; inp.pw=true; return inp; } }
+  /* GOLPE EX de la CPU: si tiene furia y está cerca, a veces lo usa */
+  else if(c.furia>=FURIA_EX && dist<120*S && c.state==='ctl' && Math.random()<0.02){ inp.dx=toFoe; inp.pw=true; return inp; }
   if(ai.t<=0){
     ai.t=P.react+Math.random()*P.reactJ;
     const r=Math.random();
@@ -1416,6 +1568,21 @@ function drawFighter(f,t){
     }
   }
   if(f.stunFlash>0){ cx.fillStyle='#e8d54a'; cx.font=`${12*S}px sans-serif`; cx.textAlign='center'; cx.fillText('✶',0,-h*1.02); cx.textAlign='left'; }
+  /* aura: súper listo (rojo) / furia llena (dorado) */
+  if(f.superReady&&f.superReady()){
+    const pu=.5+.5*Math.sin(f.anim*10); cx.save(); cx.globalCompositeOperation='lighter'; cx.globalAlpha=.25+pu*.4;
+    cx.strokeStyle='#ff3b3b'; cx.lineWidth=3*S; cx.beginPath(); cx.arc(0,-h*.5,h*.62,0,7); cx.stroke(); cx.restore();
+  } else if(f.furia>=FURIA_EX){
+    const pu=.5+.5*Math.sin(f.anim*8); cx.save(); cx.globalCompositeOperation='lighter'; cx.globalAlpha=.18+pu*.28;
+    cx.strokeStyle='#ffd54a'; cx.lineWidth=2.5*S; cx.beginPath(); cx.arc(0,-h*.5,h*.58,0,7); cx.stroke(); cx.restore();
+  }
+  if(f.exGlow>0){ cx.save(); cx.globalCompositeOperation='lighter'; cx.globalAlpha=Math.min(1,f.exGlow);
+    const g=cx.createRadialGradient(0,-h*.5,0,0,-h*.5,h*.8); g.addColorStop(0,'#fff7d6'); g.addColorStop(1,'rgba(255,213,74,0)');
+    cx.fillStyle=g; cx.beginPath(); cx.arc(0,-h*.5,h*.8,0,7); cx.fill(); cx.restore(); }
+  /* hit-flash: destello blanco al recibir golpe (GDD juice) */
+  if(f.hitFlash>0){ cx.save(); cx.globalCompositeOperation='lighter'; cx.globalAlpha=Math.min(1,f.hitFlash*1.7);
+    const g=cx.createRadialGradient(0,-h*.5,0,0,-h*.5,h*.75); g.addColorStop(0,'#ffffff'); g.addColorStop(.6,'rgba(255,255,255,.5)'); g.addColorStop(1,'rgba(255,255,255,0)');
+    cx.fillStyle=g; cx.beginPath(); cx.arc(0,-h*.5,h*.75,0,7); cx.fill(); cx.restore(); }
   cx.globalAlpha=1;
   cx.restore();
   /* líneas de arruga encima */
@@ -1494,12 +1661,41 @@ function drawHUD(t){
     cx.fill();
     cx.fillStyle='#1a1a2e'; cx.font=`bold ${11*S}px sans-serif`; cx.textAlign=flip?'right':'left';
     cx.fillText(`${f.ch.em} ${f.ch.nm}${f.isCPU?' (CPU)':''}`, flip?x+bw:x, y+bh+14*S);
+    /* barra de FURIA / estamina (se carga con ↓) */
+    const fr=f.furia/FURIA_MAX, fy2=y+bh+20*S, fbh=6*S, full=f.furia>=FURIA_EX;
+    cx.fillStyle='rgba(26,26,46,.45)'; rr(x,fy2,bw,fbh,3*S); cx.fill();
+    cx.fillStyle=full?'#ffd54a':'#b8860b';
+    if(flip) rr(x+bw*(1-fr),fy2,bw*fr,fbh,3*S); else rr(x,fy2,bw*fr,fbh,3*S); cx.fill();
+    cx.strokeStyle='rgba(247,241,227,.6)'; cx.lineWidth=1*S; rr(x,fy2,bw,fbh,3*S); cx.stroke();
+    if(full){ cx.fillStyle='#b8860b'; cx.font=`bold ${9*S}px sans-serif`;
+      cx.fillText('⚡ GOLPE FUERTE', flip?x+bw:x, fy2+fbh+9*S); }
     /* combo counter (GDD) */
     if(f.comboShow>0&&f.comboOn>1){
       cx.fillStyle='#9d2235'; cx.font=`bold ${18*S}px sans-serif`;
-      cx.fillText(`¡${f.comboOn} COMBO!`, flip?x+bw:x, y+bh+34*S);
+      cx.fillText(`¡${f.comboOn} COMBO!`, flip?x+bw:x, y+bh+46*S);
     }
   });
+  /* aviso de SÚPER (tu vida ≤ 15%) para el jugador humano */
+  [ST.p1,ST.p2].forEach(f=>{ if(!f||f.isCPU) return;
+    if(f.superReady&&f.superReady()&&!cine.active){
+      const pulse=.6+.4*Math.sin(performance.now()/120);
+      cx.save(); cx.textAlign='center'; cx.globalAlpha=pulse;
+      cx.font=`900 ${26*S}px system-ui,Arial,sans-serif`; cx.lineWidth=6*S; cx.strokeStyle='rgba(0,0,0,.75)';
+      const tx=f.x, ty=f.y-f.h*1.3;
+      cx.strokeText('¡A + B!',tx,ty); cx.fillStyle='#ff4b4b'; cx.fillText('¡A + B!',tx,ty);
+      cx.font=`800 ${11*S}px system-ui,Arial,sans-serif`; cx.globalAlpha=pulse*.9; cx.fillStyle='#fff';
+      cx.fillText('GOLPE FINAL',tx,ty+15*S);
+      cx.restore();
+    }
+  });
+  /* aviso del comando de movimiento ejecutado (feedback tipo MK) */
+  [ST.p1,ST.p2].forEach(f=>{ if(!f||f.isCPU||f.cmdFlash<=0) return;
+    cx.save(); cx.globalAlpha=Math.min(1,f.cmdFlash*2.2); cx.textAlign='center';
+    cx.font=`800 ${13*S}px system-ui,Arial,sans-serif`; cx.lineWidth=4*S; cx.strokeStyle='rgba(0,0,0,.75)';
+    cx.strokeText(f.cmdName,f.x,f.y-f.h*1.5); cx.fillStyle='#ffd54a'; cx.fillText(f.cmdName,f.x,f.y-f.h*1.5);
+    cx.restore();
+  });
+  cx.textAlign='left';
   /* timer */
   const tm=Math.max(0,MATCH_TIME-ST.fightT), mm=Math.floor(tm/60), ss=Math.floor(tm%60);
   cx.fillStyle='rgba(247,241,227,.92)'; rr(W/2-34*S,8*S,68*S,26*S,8*S); cx.fill();
@@ -1540,10 +1736,14 @@ CHARS.forEach((c,i)=>{
     if(ST.pendingMode==='fight'){
       if(ST.selP===null||ST.selP===i){ ST.selP=i; ST.selC=null; }
       else ST.selC=i;
+    } else if(ST.pendingMode==='training'){
+      if(ST.selP===null){ ST.selP=i; } else { ST.selC=i; }
     } else { ST.selP=i; ST.selC=null; }
     [...grid.children].forEach((el,j)=>{ el.classList.toggle('sel',j===ST.selP); el.classList.toggle('cpu',j===ST.selC); });
-    $('selInfo').innerHTML=`<b>${c.nm} ${c.cn}</b> · ${c.arch}<br><small>B: ${c.sp.n.name} · B→: ${c.sp.s.name} · B↓: ${c.sp.d.name}</small>`;
+    $('selInfo').innerHTML=`<b>${c.nm} ${c.cn}</b> · ${c.arch}<br><small>↓→+A: ${c.sp.n.name} · ↓←+A: ${c.sp.s.name} · →↓→+A: ${c.sp.d.name}<br>(o botón B · combos: A, A, A)</small>`;
     updateFightBtn();
+    /* entrenamiento: al elegir el rival arranca solo */
+    if(ST.pendingMode==='training' && ST.selP!==null && ST.selC!==null){ startTraining(); }
   };
   grid.appendChild(d);
 });
@@ -1556,7 +1756,9 @@ function updateFightBtn(){
   $('fightBtn').disabled=!ok; $('fightBtn').style.opacity=ok?1:.5;
   const tb=$('targetBtn'); if(tb){ tb.disabled=!ok; tb.style.opacity=ok?1:.5; }
   const wb=$('towerStartBtn'); if(wb){ wb.disabled=!ok; wb.style.opacity=ok?1:.5; }
-  if(ST.pendingMode==='target')
+  if(ST.pendingMode==='training')
+    $('selTitle').textContent = ST.selP===null?'🥊 Elige tu personaje':'Ahora elige el muñeco rival (no se defiende)';
+  else if(ST.pendingMode==='target')
     $('selTitle').textContent = ST.selP===null?'Elige tu personaje':'¡Listo! Toca 🎯 Empezar';
   else if(ST.pendingMode==='tower')
     $('selTitle').textContent = (ST.pendingTower?ST.pendingTower.name+' — ':'')+(ST.selP===null?'Elige tu peleador':'¡Listo! Toca 🏯 Comenzar');
@@ -1571,6 +1773,7 @@ function applySelectButtons(){ const m=ST.pendingMode;
   $('randBtn').style.display = m==='fight'?'':'none';
   $('diffRow').style.display = m==='fight'?'':'none';
   $('targetBtn').style.display = m==='target'?'':'none';
+  $('rankViewBtn').style.display = m==='target'?'':'none';
   $('towerStartBtn').style.display = m==='tower'?'':'none'; }
 function openSelect(mode){ ac(); if(fsSupported) goFullscreen();
   ST.pendingMode=mode; ST.selP=null; ST.selC=null;
@@ -1580,6 +1783,7 @@ function openSelect(mode){ ac(); if(fsSupported) goFullscreen();
   $('title').classList.add('hidden'); $('ending').classList.add('hidden'); $('towers').classList.add('hidden'); $('spirits').classList.add('hidden');
   $('select').classList.remove('hidden'); ST.mode='select'; }
 $('modeFight').onclick=()=>openSelect('fight');
+$('modeTraining').onclick=()=>openSelect('training');
 $('modeTarget').onclick=()=>openSelect('target');
 $('backMenu').onclick=()=>{ $('select').classList.add('hidden'); $('title').classList.remove('hidden'); ST.mode='title'; };
 /* ===== Modo Historia ===== */
@@ -1643,12 +1847,15 @@ function beginFight(c1,c2){
   preloadSprites(c1); preloadSprites(c2);
   ST.pal=THEMES[Math.floor(Math.random()*THEMES.length)];
   projectiles=[]; particles=[]; PLATFORMS=[]; targets=[]; ST.fightT=0; hitstopT=0; ST.paused=false;
+  cine.active=false; cine.kind=null; try{ endCineVideo(); }catch(e){}
   ST.mode='fight'; $('pause').style.display='block';
   roundIntro=ROUND_INTRO;
   try{ startBGM(); }catch(e){}
   try{ if(window.ZFfire) window.ZFfire(); }catch(e){}
 }
 function startFight(){ CPU_D=ST.cpuDiff||2; ST.gameMode='fight'; beginFight(CHARS[ST.selP],CHARS[ST.selC]); }
+/* MODO LIBRE / ENTRENAMIENTO: el rival es un muñeco que no ataca ni muere */
+function startTraining(){ ST.gameMode='training'; beginFight(CHARS[ST.selP],CHARS[ST.selC]); }
 
 /* ===== TORRES (escalera estilo Mortal Kombat) ===== */
 const TOWERS=[
@@ -1681,7 +1888,7 @@ function startTowerFight(step){ const t=ST.tower; ST.towerStep=step;
   CPU_D = t.len>1 ? t.sd+(t.ed-t.sd)*(step/(t.len-1)) : t.ed;
   ST.gameMode='tower'; beginFight(CHARS[ST.selP], CHARS[ST.towerOpps[step]]); }
 function endTowerFight(you){
-  $('pause').style.display='none'; $('endUnlock').classList.add('hidden');
+  $('pause').style.display='none'; $('endUnlock').classList.add('hidden'); $('endRank').style.display='none';
   try{ stopBGM(); jingle(you?'win':'lose'); }catch(e){}
   const t=ST.tower, step=ST.towerStep, last=(step>=t.len-1);
   try{ grantSpirit('spirit_'+ST.p1.ch.id); }catch(e){}
@@ -1806,10 +2013,56 @@ function endTarget(){
   $('endText').innerHTML=`<b>${ST.p1.ch.em} ${ST.p1.ch.nm}</b> rompió los ${targetTotal} blancos.<br>Tu tiempo: <b>${fmtTime(ti)}</b> ⏱️<br>Mejor tiempo: <b>${fmtTime(best)}</b>${record?' ✨':''}`;
   try{ const el=champFromTime(ti); const spId='el_'+ST.p1.ch.id+'_'+el; const r=grantSpirit(spId); showEndUnlock(spId,r.isNew); }catch(e){}
   try{ if(window.ZFchallenge) window.ZFchallenge('target'); }catch(e){}
+  ST.lastTargetId=id; ST.lastTargetTime=ti; ST.lastTargetName=ST.p1.ch.nm;
+  $('endRank').style.display='block';
   $('ending').classList.remove('hidden');
 }
+/* ===== RANKING del Target Test (local; "mundial" requiere backend) ===== */
+function rankKey(id){ return 'zf_rank_'+id; }
+function getRank(id){ try{ return JSON.parse(localStorage.getItem(rankKey(id))||'[]'); }catch(e){ return []; } }
+function saveRank(id,a){ try{ localStorage.setItem(rankKey(id), JSON.stringify(a.slice(0,50))); }catch(e){} }
+function addRank(id,name,time){ const a=getRank(id); const e={n:name,t:time}; a.push(e); a.sort((x,y)=>x.t-y.t);
+  saveRank(id,a); return a.indexOf(e)+1; }
+function escTxt(s){ return String(s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+function renderRankList(id, hi){
+  const a=getRank(id);
+  let html = a.length? '' : '<p style="color:#9fb0ff;text-align:center">Aún no hay tiempos guardados. ¡Sé el primero!</p>';
+  a.slice(0,15).forEach((e,i)=>{ const pos=i+1, me=(hi&&pos===hi);
+    html+=`<div class="rank-row${me?' me':''}${pos<=3?' top'+pos:''}"><span class="rk-pos">#${pos}</span><span class="rk-name">${escTxt(e.n)}</span><span class="rk-time">${fmtTime(e.t)}</span></div>`; });
+  $('rankList').innerHTML=html;
+}
+let _rankCurId=null, _rankCurTime=0;
+function openRankView(id){
+  const ch=CHARS.find(c=>c.id===id);
+  $('rankTitle').textContent='🏆 Ranking — '+(ch?ch.nm:'');
+  $('rankCongrats').classList.add('hidden'); $('rankEntry').classList.add('hidden');
+  _rankCurId=id; renderRankList(id,0); $('rankBoard').classList.remove('hidden');
+}
+function openRankSubmit(id,time,nm){
+  $('rankTitle').textContent='🏆 Ranking — '+nm;
+  const a=getRank(id); const wouldBe=a.filter(e=>e.t<time).length+1;
+  $('rankCongrats').innerHTML=`¡Felicidades! Terminaste el mapa de <b>${nm}</b> en <b>${fmtTime(time)}</b>.<br>Quedarías en el <b>puesto mundial #${wouldBe}</b>.`;
+  $('rankCongrats').classList.remove('hidden');
+  $('rankEntry').classList.remove('hidden');
+  try{ $('rankName').value = localStorage.getItem('zf_playername')||''; }catch(e){}
+  _rankCurId=id; _rankCurTime=time; renderRankList(id,0);
+  $('rankBoard').classList.remove('hidden');
+}
+$('rankViewBtn').onclick=()=>{ if(ST.selP===null) return; openRankView(CHARS[ST.selP].id); };
+$('endRank').onclick=()=>{ if(ST.lastTargetId) openRankSubmit(ST.lastTargetId, ST.lastTargetTime, ST.lastTargetName); };
+$('rankClose').onclick=()=>$('rankBoard').classList.add('hidden');
+$('rankSave').onclick=()=>{
+  const id=_rankCurId, t=_rankCurTime;
+  let nm=($('rankName').value||'').trim().slice(0,14) || 'Anónimo';
+  try{ localStorage.setItem('zf_playername',nm); }catch(e){}
+  const pos=addRank(id,nm,t);
+  $('rankCongrats').innerHTML=`✅ ¡Guardado! <b>${escTxt(nm)}</b> · <b>${fmtTime(t)}</b><br>Tu puesto mundial: <b>#${pos}</b> de ${getRank(id).length}.`;
+  $('rankEntry').classList.add('hidden');
+  renderRankList(id,pos);
+};
 function endMatch(winner,how){
   if(ST.mode!=='fight') return;
+  $('endRank').style.display='none';
   const you=winner===ST.p1;
   try{ stopBGM(); }catch(e){}
   if(ST.gameMode==='tower'){ return endTowerFight(you); }
@@ -1891,6 +2144,11 @@ bindHold('bA',()=>{touchIn.a=true;},()=>{touchIn.a=false;});
 bindHold('bB',()=>{touchIn.b=true;},()=>{touchIn.b=false;});
 bindHold('bJump',()=>{touchIn.j=true;},()=>{touchIn.j=false;});
 bindHold('bGrab',()=>{touchIn.g=true;},()=>{touchIn.g=false;});
+bindHold('bP',()=>{touchIn.pw=true;},()=>{touchIn.pw=false;});
+/* el botón ✦ pulsa cuando hay súper o golpe fuerte disponible */
+setInterval(()=>{ const b=$('bP'); if(!b)return; const p=ST.p1;
+  const rdy = p && ST.mode==='fight' && ((p.superReady&&p.superReady())||p.furia>=FURIA_EX);
+  b.classList.toggle('rdy',!!rdy); }, 160);
 
 /* ============ Cuenta regresiva de inicio (3-2-1 ¡PELEA!) ============ */
 let roundIntro=0; const ROUND_INTRO=3.6;   // 3s de números + ~0.6s de "¡PELEA!"
@@ -1900,6 +2158,89 @@ const NO_INPUT={dx:0,dy:0,a:false,b:false,g:false,j:false};
 let flashes=[], zoomT=0, zoomPow=0;
 function spawnFlash(x,y,col,big){ flashes.push({x,y,r:5*S,mr:(big?72:40)*S,life:1,col:col||'#fff'}); }
 function camPunch(pow,dur){ zoomPow=Math.max(zoomPow,pow); zoomT=Math.max(zoomT,dur); }
+
+/* ============ CINEMÁTICAS de golpe fuerte (EX) y SÚPER (A+B) ============
+   Congelan la pelea, muestran un montaje (retrato + texto + energía) y aplican
+   el daño en el clímax. GANCHO PARA POLLO AI: si existe art/cine/<id>-<kind>.mp4
+   se reproduce ese video en lugar del montaje in-engine (ver tryCineVideo). */
+function startCine(kind,att,foe,dir){
+  cine.active=true; cine.kind=kind; cine.t=0; cine.dealt=false; cine.willKO=false;
+  cine.dur = kind==='super'? 2.6 : 1.15;
+  cine.att=att; cine.foe=foe; cine.dir=dir||att.face;
+  cine.dmg = foe.maxhp*(kind==='super'?SUPER_DMG_FRAC:EX_DMG_FRAC);
+  if(kind==='super' && ST.gameMode!=='training') att.superUsed=true;
+  hitstopT=0;
+  att.face=Math.sign(foe.x-att.x)||att.face; att.vx=0; att.atk=null; att.setState('ctl');
+  att.exGlow=Math.max(att.exGlow,1);
+  sfx(kind==='super'?'ko':'heavy');
+  tryCineVideo(kind,att);
+}
+/* Reproduce un video pre-generado (Pollo AI) si está disponible; si no, montaje in-engine */
+function tryCineVideo(kind,att){
+  const v=$('cineVid'); if(!v) return;
+  const src='art/cine/'+att.ch.id+'-'+kind+'.mp4';
+  v.onerror=()=>{ v.classList.add('hidden'); };
+  v.oncanplay=()=>{ v.classList.remove('hidden'); v.play().catch(()=>{}); };
+  try{ v.src=src; v.load(); }catch(e){}
+}
+function endCineVideo(){ const v=$('cineVid'); if(v){ try{v.pause();}catch(e){} v.classList.add('hidden'); v.removeAttribute('src'); } }
+function updateCine(dt){
+  cine.t+=dt;
+  const climax = cine.kind==='super'? cine.dur*0.62 : cine.dur*0.50;
+  if(!cine.dealt && cine.t>=climax){
+    cine.dealt=true;
+    const foe=cine.foe, att=cine.att, dir=cine.dir;
+    foe.hp=Math.max(0,foe.hp-cine.dmg);
+    foe.crumple=.9; foe.hitFlash=.45; foe.setState('hit'); foe.hitstun=.55; foe.invT=.55; foe.kdPending=true;
+    foe.vx=dir*8*S*FEEL.kbMul; foe.vy=-3*S;
+    shakeT=.55; shakeM=cine.kind==='super'?18:11; camPunch(cine.kind==='super'?.24:.13,.55);
+    spawnParticles(foe.x,foe.y-foe.h*.5,'#fff',cine.kind==='super'?32:18,2.6);
+    spawnParticles(foe.x,foe.y-foe.h*.5,att.ch.col,16,2);
+    spawnFlash(foe.x,foe.y-foe.h*.5,'#fff',true); spawnFlash(foe.x,foe.y-foe.h*.5,'#ffe9a8',true);
+    sfx(cine.kind==='super'?'ko':'heavy');
+    cine.willKO = foe.hp<=0;
+  }
+  if(cine.t>=cine.dur){
+    const foe=cine.foe, dir=cine.dir, ko=cine.willKO;
+    cine.active=false; cine.kind=null; endCineVideo();
+    if(ko) koFighter(foe,dir,8);
+  }
+}
+function drawCine(){
+  const k=cine.kind, p=Math.min(1,cine.t/cine.dur), att=cine.att, cxp=W*0.5, cyp=H*0.52;
+  cx.save();
+  cx.fillStyle='rgba(6,4,12,'+((k==='super'?.62:.42)*Math.min(1,p*4))+')'; cx.fillRect(0,0,W,H);
+  const bh=(k==='super'?.13:.08)*H*Math.min(1,p*5);
+  cx.fillStyle='#05030c'; cx.fillRect(0,0,W,bh); cx.fillRect(0,H-bh,W,bh);
+  /* rayos de energía giratorios */
+  cx.globalAlpha=.45*Math.min(1,p*3);
+  for(let i=0;i<16;i++){ const a=i/16*Math.PI*2+cine.t*1.8; cx.strokeStyle=i%2?att.ch.col:'#ffd54a'; cx.lineWidth=(k==='super'?7:4)*S;
+    cx.beginPath(); cx.moveTo(cxp,cyp); cx.lineTo(cxp+Math.cos(a)*W,cyp+Math.sin(a)*W); cx.stroke(); }
+  cx.globalAlpha=1;
+  /* retrato del atacante (sprite o emoji), entra desde la izquierda con rebote */
+  const enter=Math.min(1,p*3.2), sz=(k==='super'?280:190)*S;
+  const px=cxp+(1-enter)*(-W*0.6), bob=Math.sin(cine.t*9)*5*S;
+  const so=SPR[att.ch.id+'-ready']||SPR[att.ch.id+'-idle'], spr=(so&&so.ok)?so.img:null;
+  cx.save(); cx.translate(px,cyp+bob);
+  if(spr){ const ar=(spr.naturalWidth/spr.naturalHeight)||.8, hh=sz, ww=hh*ar;
+    cx.shadowColor=att.ch.col; cx.shadowBlur=44*S; const _sm=cx.imageSmoothingEnabled; cx.imageSmoothingEnabled=false;
+    cx.drawImage(spr,-ww/2,-hh*0.9,ww,hh); cx.imageSmoothingEnabled=_sm; }
+  else { cx.font=(sz*.8)+'px serif'; cx.textAlign='center'; cx.textBaseline='middle'; cx.fillText(att.ch.em,0,-sz*0.4); }
+  cx.restore();
+  /* títulos */
+  cx.textAlign='center'; const ty=H*0.26;
+  const title=k==='super'?'¡GOLPE FINAL!':'¡GOLPE FURIOSO!';
+  cx.font='900 '+((k==='super'?54:36)*S)+'px system-ui,Arial,sans-serif';
+  cx.lineWidth=8*S; cx.strokeStyle='rgba(0,0,0,.7)'; cx.strokeText(title,cxp,ty);
+  const grd=cx.createLinearGradient(0,ty-44*S,0,ty+12*S); grd.addColorStop(0,'#fff3cf'); grd.addColorStop(1,k==='super'?'#ff5252':'#ffd54a');
+  cx.fillStyle=grd; cx.fillText(title,cxp,ty);
+  cx.font='800 '+((k==='super'?26:19)*S)+'px system-ui,Arial,sans-serif'; cx.fillStyle='#e8ecff';
+  cx.fillText(att.ch.em+'  '+att.ch.nm.toUpperCase(),cxp,ty+(k==='super'?46:32)*S);
+  /* flash de impacto en el clímax */
+  const climax=k==='super'?.62:.50;
+  if(p>climax&&p<climax+.14){ cx.fillStyle='rgba(255,255,255,'+(1-(p-climax)/.14)+')'; cx.fillRect(0,0,W,H); }
+  cx.textAlign='left'; cx.textBaseline='alphabetic'; cx.restore();
+}
 function drawGhosts(f){
   const sp=Math.hypot(f.vx,f.vy), dashing=f.state==='atk'&&f.atk&&f.atk.dash;
   if(sp<6*S && !dashing) return; const img=getSpr(f); if(!img||f.hist.length<4) return;
@@ -1967,7 +2308,8 @@ function loop(now){
     if(roundIntro<=0){ roundIntro=0; sfx&&sfx('heavy'); }
   }
   else if(ST.mode==='fight'&&!ST.paused){
-    if(hitstopT>0){ hitstopT-=dt; }
+    if(cine.active){ updateCine(dt); }
+    else if(hitstopT>0){ hitstopT-=dt; }
     else {
       ST.fightT+=dt;
       const i1=mergedInput(), i2=aiInput(ST.p2,dt);
@@ -1977,7 +2319,7 @@ function loop(now){
       const a=ST.p1,b=ST.p2, ov=((a.h+b.h)*.5+22*S)-Math.abs(a.x-b.x);
       if(ov>0&&Math.abs(a.y-b.y)<a.h*.8){ const push=Math.sign(a.x-b.x)||1; a.x+=push*ov/2; b.x-=push*ov/2; }
       [a,b].forEach(f=>{ if(f.comboShow>0){ f.comboShow-=dt; } if(f.foe.state!=='hit') f.comboPrev=false; });
-      if(ST.fightT>=MATCH_TIME){
+      if(ST.fightT>=MATCH_TIME && ST.gameMode!=='training'){
         const w = a.hp/a.maxhp>=b.hp/b.maxhp ? a : b; endMatch(w,'time');
       }
     }
@@ -2055,7 +2397,7 @@ function loop(now){
   cx.globalAlpha=1;
   cx.restore();
   /* ===== HUD (los controles son HTML: mando retro) ===== */
-  if(ST.mode==='fight'){ drawHUD(t); }
+  if(ST.mode==='fight'){ drawHUD(t); if(cine.active) drawCine(); }
   else if(ST.mode==='target'){ drawTargetHUD(); }
   if(roundIntro>0&&(ST.mode==='fight'||ST.mode==='target')) drawCountdown();
 }
