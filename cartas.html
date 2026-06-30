@@ -1,5 +1,8 @@
 <!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Zodiac Fighters — Álbum (614 cartas)</title><style>*{margin:0;padding:0;box-sizing:border-box}
+<title>Zodiac Fighters — Álbum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>*{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Segoe UI",Roboto,sans-serif;background:radial-gradient(120% 80% at 20% 0%,#1a1140,#0a0820 60%,#06040f);color:#e8ecff;padding:18px;min-height:100vh}
 header{text-align:center;margin:10px 0 24px}
 header h1{font-size:clamp(28px,6vw,46px);font-weight:900;letter-spacing:2px;background:linear-gradient(180deg,#fff,#ffe9a8,#ff9ad1);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 14px rgba(255,180,90,.5))}
@@ -22,7 +25,13 @@ header .sub{color:#b9c2ee;margin-top:4px;font-size:14px}
 .tcg-art{position:relative;flex:1;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid rgba(255,255,255,.28)}
 .tcg-emoji{font-size:64px;line-height:1;filter:drop-shadow(0 6px 12px rgba(0,0,0,.55));z-index:1}
 .tcg-type{font-size:9.5px;font-weight:800;color:#dbe2ff;background:rgba(0,0,0,.35);border-radius:6px;padding:3px 7px;text-align:center}
-.tcg-desc{font-size:9.5px;line-height:1.38;color:#eef0ff;background:rgba(255,255,255,.08);border-radius:6px;padding:6px 7px;overflow:hidden}
+.tcg-desc{font-family:'Caveat','Segoe Script','Bradley Hand',cursive;font-size:14px;line-height:1.18;color:#3a2a16;background:linear-gradient(165deg,#f4e8cc,#e6d2a4);border:1px solid rgba(120,86,40,.45);border-radius:6px;padding:5px 8px 6px;overflow:hidden;box-shadow:inset 0 0 14px rgba(120,86,40,.28);text-shadow:0 1px 0 rgba(255,255,255,.4)}
+.r-comun.tcg .tcg-inner{background:repeating-linear-gradient(45deg,rgba(255,255,255,.035) 0 2px,transparent 2px 7px),linear-gradient(160deg,#23252e,#14151b)}
+.r-uncommon.tcg .tcg-inner{background:repeating-linear-gradient(45deg,rgba(120,255,170,.055) 0 2px,transparent 2px 7px),linear-gradient(160deg,#133524,#0b1e15)}
+.r-rare.tcg .tcg-inner{background:repeating-linear-gradient(45deg,rgba(120,180,255,.06) 0 2px,transparent 2px 7px),linear-gradient(160deg,#14294b,#0b1730)}
+.r-epic.tcg .tcg-inner{background:repeating-linear-gradient(45deg,rgba(200,140,255,.06) 0 2px,transparent 2px 7px),linear-gradient(160deg,#251243,#150c2c)}
+.r-legendario.tcg .tcg-inner{background:repeating-linear-gradient(45deg,rgba(255,210,110,.07) 0 2px,transparent 2px 7px),linear-gradient(160deg,#3b2b0b,#231905)}
+.r-mistico.tcg .tcg-inner{background:repeating-linear-gradient(45deg,rgba(255,150,220,.06) 0 2px,transparent 2px 7px),linear-gradient(160deg,#2b1031,#151033)}
 .tcg-foot{display:flex;justify-content:space-between;font-size:8.5px;font-weight:800;color:#aab2e0;letter-spacing:.5px}
 .r-comun.tcg{background:linear-gradient(135deg,#eef2f7,#aab4c2,#7d8896)}
 .r-uncommon.tcg{background:linear-gradient(135deg,#c6f5d2,#4fc46b,#2c8d4f)}
@@ -35,8 +44,16 @@ header .sub{color:#b9c2ee;margin-top:4px;font-size:14px}
 @keyframes sh{0%,100%{transform:translateX(-55%)}50%{transform:translateX(55%)}}
 footer{text-align:center;color:#6b6a90;font-size:12px;margin:30px 0 10px}
 @media print{body{background:#fff;color:#000}.printbtn{display:none}header h1{filter:none;-webkit-text-fill-color:initial;color:#5a23c8}.tcg,.tcg *{-webkit-print-color-adjust:exact;print-color-adjust:exact}.grid{grid-template-columns:repeat(4,1fr);gap:8px}.howto{color:#555}.sech{color:#333;break-after:avoid}.cardwrap{break-inside:avoid}}
-.tcg-rarbadge{font-size:9px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;color:#fff;border-radius:999px;padding:2px 8px;white-space:nowrap}
-.tcg-rarbadge.r-comun{background:#7d8896}.tcg-rarbadge.r-uncommon{background:#2c8d4f}.tcg-rarbadge.r-rare{background:#2b5fb0}.tcg-rarbadge.r-epic{background:#7a2bd0}.tcg-rarbadge.r-legendario{background:#c79a24}.tcg-rarbadge.r-mistico{background:linear-gradient(90deg,#ff9ad1,#b15cff,#5cc8ff)}
+.tcg-rarbadge{position:relative;overflow:hidden;font-size:9.5px;font-weight:900;letter-spacing:1.3px;text-transform:uppercase;color:#fff;border-radius:999px;padding:3px 11px;white-space:nowrap;border:1px solid rgba(255,255,255,.5);text-shadow:0 1px 2px rgba(0,0,0,.6);box-shadow:0 0 12px -1px var(--rc,#666),inset 0 1px 1px rgba(255,255,255,.55),inset 0 -2px 3px rgba(0,0,0,.32)}
+.tcg-rarbadge.r-comun{background:linear-gradient(135deg,#dfe4ec,#9aa0ad,#6b7280);--rc:#9aa0ad}
+.tcg-rarbadge.r-uncommon{background:linear-gradient(135deg,#8af3aa,#3fc46b,#1d7a42);--rc:#3fc46b}
+.tcg-rarbadge.r-rare{background:linear-gradient(135deg,#8fc6ff,#3b82f6,#1b50ab);--rc:#3b82f6}
+.tcg-rarbadge.r-epic{background:linear-gradient(135deg,#e3acff,#b15cff,#7327c9);--rc:#b15cff}
+.tcg-rarbadge.r-legendario{background:linear-gradient(135deg,#fff4c8,#ffd34d,#c79a24);color:#4a3500;text-shadow:0 1px 1px rgba(255,255,255,.5);--rc:#ffb01f}
+.tcg-rarbadge.r-mistico{background:linear-gradient(135deg,#ff9ad1,#b15cff,#5cc8ff,#ffd86b);background-size:300% 300%;animation:misticBadge 4s ease infinite;color:#3a1a3a;--rc:#ff4d8d}
+@keyframes misticBadge{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.tcg-rarbadge.r-epic::after,.tcg-rarbadge.r-legendario::after,.tcg-rarbadge.r-mistico::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 36%,rgba(255,255,255,.75) 50%,transparent 64%);transform:translateX(-130%);animation:badgeSheen 2.8s ease-in-out infinite}
+@keyframes badgeSheen{0%,18%{transform:translateX(-130%)}60%,100%{transform:translateX(130%)}}
 .tcg.dark .tcg-art{filter:brightness(.45) saturate(.6)}
 .tcg.dark .tcg-art::after{content:'';position:absolute;inset:0;z-index:1;background:radial-gradient(circle at 50% 40%,rgba(0,0,0,.15),rgba(0,0,0,.7))}
 .tcg.dark .tcg-emoji{filter:drop-shadow(0 0 6px #000) brightness(.65) contrast(1.1)}
@@ -3730,4 +3747,32 @@ footer{text-align:center;color:#6b6a90;font-size:12px;margin:30px 0 10px}
    <div class="tcg-desc">Para quienes alcanzan rachas legendarias.</div>
    <div class="tcg-foot"><span>Nº 614/614</span><span>Racha</span></div>
  </div></div><div class="howto">🔓 Se gana en hitos de racha de fuego (días 7,10,14,17,20,25,35).</div></div></div>
-<footer>Generado para Zodiac Fighters · WONEJO MALO Entertainment</footer></body></html>
+<footer>Generado para Zodiac Fighters · WONEJO MALO Entertainment</footer>
+<script src="spirits-data.js"></script>
+<script src="spirits-lore.js"></script>
+<script>
+/* Coloca art/cartas/<id>.png en cada carta (si existe) y aplica el lore extendido. */
+(function(){
+  var map={};
+  function add(arr){ (arr||[]).forEach(function(it){ if(it&&it[1]&&!(it[1] in map)) map[it[1]]=it[0]; }); }
+  (window.ZF_COLLECT||[]).forEach(function(c){ add(c.items); });
+  add(window.ZF_STREAK||[]);
+  var LORE=window.ZF_LORE||{};
+  document.querySelectorAll('.tcg-art').forEach(function(art){
+    var inner=art.closest('.tcg-inner'); if(!inner) return;
+    var nm=inner.querySelector('.tcg-name'); if(!nm) return;
+    var id=map[nm.textContent.trim()]; if(!id) return;
+    /* lore extendido */
+    if(LORE[id]){ var dsc=inner.querySelector('.tcg-desc'); if(dsc) dsc.textContent=LORE[id]; }
+    /* imagen de la carta */
+    var img=new Image();
+    img.onload=function(){
+      art.innerHTML='';
+      img.style.cssText='width:100%;height:100%;object-fit:cover;image-rendering:pixelated;border-radius:6px;position:relative;z-index:1';
+      art.appendChild(img);
+    };
+    img.src='art/cartas/'+id+'.png';
+  });
+})();
+</script>
+</body></html>

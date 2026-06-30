@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Álbum de cartas — demo / código comentado (Zodiac Fighters)</title>
+<!--
+  =====================================================================
+  CÓMO ESTÁ HECHO EL ÁLBUM  (extraído de Zodiac Fighters · WONEJO MALO)
+  =====================================================================
+  Este archivo es AUTOCONTENIDO: ábrelo en el navegador y funciona solo,
+  con 12 cartas de ejemplo. Es el mismo código del juego, recortado a lo
+  esencial del álbum y con datos de muestra para que se entienda.
+
+  El álbum es una "vista dividida":
+    - IZQUIERDA: grilla de cartas agrupadas por sección, cada sección con
+      su propio color. Cada celda es una mini-carta (gema de rareza + arte).
+    - DERECHA: la carta seleccionada en grande (componente .tcg).
+  Se navega con clic o con las flechas del teclado (navegación por la
+  POSICIÓN VISUAL real de la grilla, no por orden del array).
+
+  Piezas clave:
+    DATOS   -> SPIRITS, SECTIONS, ORDER, THEME, RARNAME  (aquí: de ejemplo)
+    ESTADO  -> owned(id)  (en el juego: localStorage; aquí: un Set)
+    RENDER  -> renderAlbum()      arma la grilla por secciones
+               selectAlbumCard()  pinta la carta grande a la derecha
+               albumMove()        flechas = salto a la carta vecina visual
+               tcgCard()          HTML de la carta grande
+               artImg()/pixEmoji() arte real (art/cartas/<id>.png) o emoji
+  =====================================================================
+-->
+<style>
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#0c0a1e; color:#eef; font-family:system-ui,Segoe UI,Arial,sans-serif; padding:16px; }
+  h1{ font-size:18px; color:#cfd6ff; }
+  .panel{ max-width:680px; margin:0 auto; background:#14122e; border:1px solid #2c2a55; border-radius:16px; padding:14px; }
+  .sp-progress{ font-size:12px; color:#9fb0ff; margin:2px 0 8px; }
+  .sp-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:8px; }
+  @media (max-width:540px){ .sp-grid{ grid-template-columns:repeat(auto-fill,minmax(64px,1fr)); } }
+
+  /* secciones del álbum con color propio */
+  .alb-sec{ grid-column:1/-1; border-radius:14px; padding:8px 10px 12px; margin:6px 0; border:1px solid #2c2a55; }
+  .alb-sec-h{ font-weight:900; font-size:14px; margin:2px 2px 9px; text-shadow:0 1px 2px #000; letter-spacing:.3px; }
+  .alb-sec-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:8px; }
+  @media (max-width:540px){ .alb-sec-grid{ grid-template-columns:repeat(auto-fill,minmax(64px,1fr)); } }
+
+  /* álbum dividido: grilla izq + carta seleccionada der */
+  .album-split{ display:flex; gap:14px; align-items:flex-start; }
+  .album-grid-wrap{ flex:1; min-width:0; overflow-y:auto; max-height:60vh; padding-right:4px; }
+  .album-detail{ width:236px; flex-shrink:0; position:sticky; top:0; }
+  .sp-cell.sel{ outline:3px solid #ffd86b; outline-offset:1px; box-shadow:0 0 16px -2px #ffd86b; }
+  @media (max-width:700px){ .album-detail{ width:172px; } .album-grid-wrap{ max-height:56vh; } }
+  @media (max-width:480px){ .album-split{ gap:8px; } .album-detail{ width:140px; } }
+
+  /* celda (mini-carta) de la grilla */
+  .sp-cell{ border-radius:12px; padding:8px 3px 6px; text-align:center; cursor:pointer; background:#1b1940; border:2px solid #2c2a55; position:relative; transition:transform .1s; }
+  .sp-cell:active{ transform:scale(.94); }
+  .sp-cell .se{ font-size:30px; line-height:1.1; display:block; }
+  .sp-cell .sn{ font-size:10px; font-weight:700; color:#cfd6ff; display:block; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .sp-cell.locked .se{ filter:brightness(0) saturate(0); opacity:.45; }
+  .sp-cell.locked .sn{ color:#6b6a90; }
+  .sp-cell .rgem{ position:absolute; top:3px; right:4px; width:9px; height:9px; border-radius:50%; box-shadow:0 0 5px currentColor; }
+  .sp-cell img.se{ width:34px; height:34px; image-rendering:pixelated; margin:0 auto; }
+  .sp-cell img.se.real{ width:100%; height:auto; aspect-ratio:1/1; object-fit:cover; border-radius:8px; image-rendering:pixelated; }
+
+  /* rarezas: variable --rc define el color de cada rareza */
+  .r-comun{ --rc:#9aa0ad; } .r-uncommon{ --rc:#3fc46b; } .r-rare{ --rc:#3b82f6; }
+  .r-epic{ --rc:#b15cff; } .r-legendario{ --rc:#ffb01f; } .r-mistico{ --rc:#ff4d8d; }
+  .sp-cell .rgem{ color:var(--rc); background:var(--rc); }
+  .sp-cell.owned{ border-color:var(--rc); box-shadow:0 0 10px -2px var(--rc); }
+
+  /* ===== CARTA GRANDE (.tcg) ===== */
+  .tcg{ position:relative; width:100%; aspect-ratio:63/88; border-radius:14px; padding:7px; box-shadow:0 10px 26px rgba(0,0,0,.5); overflow:hidden; }
+  .tcg-inner{ position:relative; height:100%; border-radius:9px; background:#171430; display:flex; flex-direction:column; padding:8px; gap:6px; z-index:2; }
+  .tcg-top{ display:flex; justify-content:space-between; align-items:baseline; gap:6px; }
+  .tcg-name{ font-weight:900; font-size:15px; color:#fff; text-shadow:0 1px 3px #000; line-height:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .tcg-art{ position:relative; flex:1; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden; border:2px solid rgba(255,255,255,.28); }
+  .tcg-emoji{ font-size:80px; line-height:1; filter:drop-shadow(0 6px 12px rgba(0,0,0,.55)); z-index:1; }
+  img.tcg-emoji{ width:64%; height:auto; image-rendering:pixelated; }
+  img.tcg-emoji.real{ width:100%; height:100%; object-fit:cover; image-rendering:pixelated; border-radius:6px; filter:none; }
+  .tcg-type{ font-size:10px; font-weight:800; color:#dbe2ff; background:rgba(0,0,0,.35); border-radius:6px; padding:3px 7px; text-align:center; }
+  /* descripción = pergamino con tipografía manuscrita (lore) */
+  .tcg-desc{ font-family:'Caveat','Segoe Script','Bradley Hand',cursive; font-size:15px; line-height:1.22;
+    color:#3a2a16; background:linear-gradient(165deg,#f4e8cc,#e6d2a4); border:1px solid rgba(120,86,40,.45);
+    border-radius:6px; padding:6px 9px 7px; flex:0 1 auto; max-height:40%; overflow:hidden;
+    box-shadow:inset 0 0 16px rgba(120,86,40,.28); text-shadow:0 1px 0 rgba(255,255,255,.4); }
+  .tcg-foot{ display:flex; justify-content:space-between; font-size:9px; font-weight:800; color:#aab2e0; letter-spacing:.5px; }
+  /* marcos por rareza (borde exterior de la carta) */
+  .r-comun.tcg{ background:linear-gradient(135deg,#eef2f7,#aab4c2,#7d8896); }
+  .r-uncommon.tcg{ background:linear-gradient(135deg,#c6f5d2,#4fc46b,#2c8d4f); }
+  .r-rare.tcg{ background:linear-gradient(135deg,#c2dcff,#4f8ef0,#2b5fb0); }
+  .r-epic.tcg{ background:linear-gradient(135deg,#e9caff,#b15cff,#7a2bd0); }
+  .r-legendario.tcg{ background:linear-gradient(135deg,#ffeaa8,#f6c33f,#c79a24); }
+  .r-mistico.tcg{ background:linear-gradient(135deg,#ff9ad1,#b15cff,#5cc8ff,#ffd86b); background-size:300% 300%; animation:misticBorder 4s ease infinite; }
+  @keyframes misticBorder{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+  /* fondo interior por rareza (degradado + textura en diagonal) */
+  .r-comun.tcg .tcg-inner{ background:repeating-linear-gradient(45deg, rgba(255,255,255,.035) 0 2px, transparent 2px 7px), linear-gradient(160deg,#23252e,#14151b); }
+  .r-uncommon.tcg .tcg-inner{ background:repeating-linear-gradient(45deg, rgba(120,255,170,.055) 0 2px, transparent 2px 7px), linear-gradient(160deg,#133524,#0b1e15); }
+  .r-rare.tcg .tcg-inner{ background:repeating-linear-gradient(45deg, rgba(120,180,255,.06) 0 2px, transparent 2px 7px), linear-gradient(160deg,#14294b,#0b1730); }
+  .r-epic.tcg .tcg-inner{ background:repeating-linear-gradient(45deg, rgba(200,140,255,.06) 0 2px, transparent 2px 7px), linear-gradient(160deg,#251243,#150c2c); }
+  .r-legendario.tcg .tcg-inner{ background:repeating-linear-gradient(45deg, rgba(255,210,110,.07) 0 2px, transparent 2px 7px), linear-gradient(160deg,#3b2b0b,#231905); }
+  .r-mistico.tcg .tcg-inner{ background:repeating-linear-gradient(45deg, rgba(255,150,220,.06) 0 2px, transparent 2px 7px), linear-gradient(160deg,#2b1031,#151033); }
+  /* brillo holográfico (epic+) */
+  .tcg.holo .tcg-art::before{ content:''; position:absolute; inset:-60%; z-index:2;
+    background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.55) 50%,transparent 62%);
+    animation:tcgSheen 3.6s ease-in-out infinite; mix-blend-mode:overlay; pointer-events:none; }
+  @keyframes tcgSheen{ 0%,100%{ transform:translateX(-55%) } 50%{ transform:translateX(55%) } }
+  /* bloqueada */
+  .tcg.locked .tcg-emoji{ filter:brightness(0) saturate(0); opacity:.32; }
+  .tcg.locked .tcg-name{ color:#8a90c0; }
+  .tcg.locked .tcg-desc{ color:#6b4a1a; }
+  /* sello de rareza épico (metálico + destello) */
+  .tcg-rarbadge{ position:relative; overflow:hidden; font-size:9.5px; font-weight:900; letter-spacing:1.3px;
+    text-transform:uppercase; color:#fff; background:var(--rc,#666); border-radius:999px; padding:3px 11px;
+    white-space:nowrap; border:1px solid rgba(255,255,255,.5); text-shadow:0 1px 2px rgba(0,0,0,.6);
+    box-shadow:0 0 12px -1px var(--rc), inset 0 1px 1px rgba(255,255,255,.55), inset 0 -2px 3px rgba(0,0,0,.32); }
+  .tcg-rarbadge.r-comun{ background:linear-gradient(135deg,#dfe4ec,#9aa0ad,#6b7280); }
+  .tcg-rarbadge.r-uncommon{ background:linear-gradient(135deg,#8af3aa,#3fc46b,#1d7a42); }
+  .tcg-rarbadge.r-rare{ background:linear-gradient(135deg,#8fc6ff,#3b82f6,#1b50ab); }
+  .tcg-rarbadge.r-epic{ background:linear-gradient(135deg,#e3acff,#b15cff,#7327c9); }
+  .tcg-rarbadge.r-legendario{ background:linear-gradient(135deg,#fff4c8,#ffd34d,#c79a24); color:#4a3500; }
+  .tcg-rarbadge.r-mistico{ background:linear-gradient(135deg,#ff9ad1,#b15cff,#5cc8ff,#ffd86b); background-size:300% 300%; animation:misticBorder 4s ease infinite; color:#3a1a3a; }
+  .tcg-rarbadge.r-epic::after, .tcg-rarbadge.r-legendario::after, .tcg-rarbadge.r-mistico::after{
+    content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    background:linear-gradient(115deg,transparent 36%,rgba(255,255,255,.75) 50%,transparent 64%);
+    transform:translateX(-130%); animation:badgeSheen 2.8s ease-in-out infinite; }
+  @keyframes badgeSheen{ 0%,18%{ transform:translateX(-130%);} 60%,100%{ transform:translateX(130%);} }
+  .hint{ font-size:11px; color:#7d86b8; margin-top:10px; text-align:center; }
+</style>
+</head>
+<body>
+  <div class="panel">
+    <h1>📖 Álbum de espíritus — demo</h1>
+    <div class="sp-progress" id="spProg"></div>
+    <!-- ===== ESTRUCTURA HTML DEL ÁLBUM (igual que en el juego) ===== -->
+    <div id="albumView">
+      <div class="album-split">
+        <div class="album-grid-wrap"><div class="sp-grid" id="spGrid"></div></div>
+        <div class="album-detail" id="albumDetail"></div>
+      </div>
+    </div>
+    <div class="hint">Clic en una carta, o usa las flechas ← ↑ → ↓ del teclado.</div>
+  </div>
+
+<script>
+/* ============================================================
+   1) DATOS  (en el juego vienen de spirits-data.js; aquí, demo)
+   ============================================================ */
+const $ = id => document.getElementById(id);
+
+// Catálogo de cartas. En el juego son ~600; aquí 12 de ejemplo.
+const SPIRITS = {
+  leo:   {nm:'León Solar',   em:'🦁', rar:'legendario', th:'griega',  cat:'Mitología', num:1, desc:'Guardián del fuego diurno; su rugido parte la noche.', how:'Gana 5 peleas seguidas.'},
+  buho:  {nm:'Búho Lunar',   em:'🦉', rar:'rare',       th:'celta',   cat:'Bosque',    num:2, desc:'Ve en la oscuridad lo que otros temen mirar.', how:'Juega de noche.'},
+  lobo:  {nm:'Lobo Gris',    em:'🐺', rar:'uncommon',   th:'nordica', cat:'Manada',    num:3, desc:'Nunca caza solo; la manada es su escudo.', how:'Completa 3 misiones.'},
+  zorro: {nm:'Zorro Astuto', em:'🦊', rar:'comun',      th:'celta',   cat:'Bosque',    num:4, desc:'Donde hay un cerco, encuentra el hueco.', how:'Abre la máquina 1 vez.'},
+  drago: {nm:'Dragón Jade',  em:'🐉', rar:'mistico',    th:'china',   cat:'Celestial', num:5, desc:'Enrosca ríos en sus garras y exhala tormentas.', how:'Conquista una torre.'},
+  fenix: {nm:'Fénix',        em:'🔥', rar:'epic',       th:'griega',  cat:'Renacer',   num:6, desc:'Muere en llamas para volver más fuerte.', how:'Pierde y revancha-gana.'},
+  oso:   {nm:'Oso Pardo',    em:'🐻', rar:'uncommon',   th:'nordica', cat:'Montaña',   num:7, desc:'Duerme medio año y despierta con hambre de gloria.', how:'Juega 7 días.'},
+  aguila:{nm:'Águila Real',  em:'🦅', rar:'rare',       th:'maya',    cat:'Cielo',     num:8, desc:'Su vista alcanza el valle entero de un vistazo.', how:'Gana en Pekín.'},
+  gato:  {nm:'Gato Sombrío', em:'🐈‍⬛', rar:'comun',     th:'egipto',  cat:'Templo',    num:9, desc:'Camina entre dioses sin pedir permiso.', how:'Colecciona 10 cartas.'},
+  toro:  {nm:'Toro de Bronce',em:'🐂',rar:'legendario', th:'griega',  cat:'Coliseo',   num:10,desc:'Embiste muros; el suelo recuerda sus pasos.', how:'Gana 10 peleas.'},
+  rana:  {nm:'Rana Jade',    em:'🐸', rar:'comun',      th:'maya',    cat:'Pantano',   num:11,desc:'Salta entre mundos cuando llueve fuerte.', how:'Juega bajo lluvia.'},
+  serp:  {nm:'Serpiente Emplumada',em:'🐍',rar:'epic',  th:'maya',    cat:'Pirámide',  num:12,desc:'Baja del cielo por las escalinatas del templo.', how:'Gana en una pirámide.'}
+};
+
+// ORDER = todos los ids en orden; TOTAL3 = total para el "Nº x/Total".
+const ORDER  = Object.keys(SPIRITS);
+const TOTAL3 = ORDER.length;
+
+// SECTIONS = grupos del álbum (cada uno se pinta con su color).
+const SECTIONS = [
+  {title:'🏛️ Leyendas',     ids:['leo','toro','drago','fenix']},
+  {title:'🌲 Reino Natural', ids:['lobo','zorro','oso','gato','rana']},
+  {title:'🗿 Mundo Antiguo', ids:['buho','aguila','serp']}
+];
+
+// THEME = paleta del recuadro de arte por "th". RARNAME = nombre del sello.
+const THEME = {
+  griega:  {g:['#3a5bb5','#1b2c66'], glyph:'⚡', label:'Mitología Griega'},
+  celta:   {g:['#2f7a4f','#143c28'], glyph:'🍀', label:'Mundo Celta'},
+  nordica: {g:['#4a6b8a','#1f3450'], glyph:'❄️', label:'Mitología Nórdica'},
+  china:   {g:['#b5402f','#5a160e'], glyph:'🐲', label:'Zodiaco Chino'},
+  maya:    {g:['#1f8a7a','#0c3b34'], glyph:'🌽', label:'Mundo Maya'},
+  egipto:  {g:['#c79a24','#5a3f06'], glyph:'𓂀', label:'Antiguo Egipto'},
+  leyenda: {g:['#666','#222'],       glyph:'★',  label:'Leyenda'}
+};
+const RARNAME = {comun:'Común', uncommon:'Poco común', rare:'Rara', epic:'Épica', legendario:'Legendaria', mistico:'Mística'};
+
+/* ============================================================
+   2) ESTADO: qué cartas tienes
+   En el juego es localStorage. Aquí: un Set (unas sí, otras no).
+   ============================================================ */
+const OWNED = new Set(['leo','lobo','zorro','drago','oso','gato','buho','rana','toro']);
+function owned(id){ return OWNED.has(id); }
+
+/* ============================================================
+   3) ARTE: usa art/cartas/<id>.png si existe; si no, emoji pixelado.
+   pixEmoji() dibuja el emoji en un canvas chico y lo escala "nearest"
+   para que se vea pixel-art (cacheado en _emojiPx).
+   ============================================================ */
+const _emojiPx = {};
+function pixEmoji(em, px){
+  px = px || 24; const key = em + '@' + px;
+  if(_emojiPx[key]) return _emojiPx[key];
+  try{
+    const c = document.createElement('canvas'); c.width = px; c.height = px;
+    const g = c.getContext('2d'); g.imageSmoothingEnabled = false;
+    g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.font = Math.floor(px*0.84) + 'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+    g.fillText(em, px/2, px*0.54);
+    const url = c.toDataURL('image/png'); _emojiPx[key] = url; return url;
+  }catch(e){ return ''; }
+}
+function artImg(id, ok, px, cls){
+  const sp = SPIRITS[id]; const fb = pixEmoji(ok ? sp.em : '❔', px);
+  if(ok){
+    // intenta la imagen real; si no existe (onerror) cae al emoji pixelado
+    return `<img class="${cls} real" src="art/cartas/${id}.png" alt="" `
+         + `onerror="this.onerror=null;this.classList.remove('real');this.src='${fb}';">`;
+  }
+  return `<img class="${cls}" src="${fb}" alt="">`;
+}
+
+/* ============================================================
+   4) RENDER de la grilla, agrupada por SECTIONS, cada una su color.
+   ============================================================ */
+function renderAlbum(){
+  const total = ORDER.length, got = ORDER.filter(owned).length;
+  $('spProg').textContent = `Colección: ${got} / ${total} espíritus`;
+  const grid = $('spGrid'); grid.innerHTML = '';
+
+  // paleta cíclica: cada sección toma el siguiente color
+  const COLORS = ['#3b82f6','#b15cff','#ff5fb0','#3fc46b','#ffb01f','#5cc8ff','#e0653a','#9c6bff','#2bd4c0'];
+  const hx = c => { c = c.slice(1); return parseInt(c.slice(0,2),16)+','+parseInt(c.slice(2,4),16)+','+parseInt(c.slice(4,6),16); };
+
+  SECTIONS.forEach((sec, si) => {
+    const col = COLORS[si % COLORS.length], rgb = hx(col);
+    const g = sec.ids.filter(owned).length;
+    // contenedor de la sección, teñido con su color (fondo + borde translúcidos)
+    const wrap = document.createElement('div'); wrap.className = 'alb-sec';
+    wrap.style.background = `rgba(${rgb},.10)`; wrap.style.borderColor = `rgba(${rgb},.42)`;
+    const h = document.createElement('div'); h.className = 'alb-sec-h'; h.style.color = col;
+    h.textContent = `${sec.title}  (${g}/${sec.ids.length})`; wrap.appendChild(h);
+    // grilla interna de la sección
+    const inner = document.createElement('div'); inner.className = 'alb-sec-grid';
+    sec.ids.forEach(id => {
+      const sp = SPIRITS[id], ok = owned(id);
+      const c = document.createElement('div');
+      c.className = `sp-cell r-${sp.rar} ${ok ? 'owned' : 'locked'}`;
+      c.dataset.id = id;
+      // gema de rareza (esquina) + arte + nombre (o ??? si no la tienes)
+      c.innerHTML = `<span class="rgem"></span>${artImg(id, ok, 16, 'se')}<span class="sn">${ok ? sp.nm : '???'}</span>`;
+      c.onclick = () => selectAlbumCard(id);
+      inner.appendChild(c);
+    });
+    wrap.appendChild(inner); grid.appendChild(wrap);
+  });
+
+  // arranca mostrando la carta actual (o la primera) en grande
+  selectAlbumCard(_albumSel && SPIRITS[_albumSel] ? _albumSel : ORDER[0]);
+}
+
+/* ============================================================
+   5) Seleccionar carta -> pinta la grande a la derecha + marca celda.
+   ============================================================ */
+let _albumSel = null;
+function selectAlbumCard(id){
+  if(!id) return; _albumSel = id;
+  document.querySelectorAll('#spGrid .sp-cell').forEach(c => c.classList.toggle('sel', c.dataset.id === id));
+  const host = $('albumDetail'); if(host) host.innerHTML = tcgCard(id, owned(id));
+  const cell = document.querySelector('#spGrid .sp-cell[data-id="'+id+'"]'); if(cell) cell.scrollIntoView({block:'nearest'});
+}
+
+/* ============================================================
+   6) Flechas: salta a la carta VECINA según su posición visual real
+   (usa getBoundingClientRect, así funciona aunque la grilla envuelva).
+   ============================================================ */
+function albumMove(key){
+  const cells = [...document.querySelectorAll('#spGrid .sp-cell')];
+  if(!cells.length) return;
+  const cur = cells.find(c => c.dataset.id === _albumSel) || cells[0];
+  const cr = cur.getBoundingClientRect(), cx = cr.left+cr.width/2, cy = cr.top+cr.height/2;
+  let best = null, bestScore = 1e9;
+  for(const c of cells){
+    if(c === cur) continue;
+    const r = c.getBoundingClientRect();
+    const dx = (r.left+r.width/2) - cx, dy = (r.top+r.height/2) - cy;
+    let primary, cross;
+    if(key === 'ArrowRight'){ if(dx <= 6) continue; primary = dx;  cross = Math.abs(dy); }
+    else if(key === 'ArrowLeft'){ if(dx >= -6) continue; primary = -dx; cross = Math.abs(dy); }
+    else if(key === 'ArrowDown'){ if(dy <= 6) continue; primary = dy;  cross = Math.abs(dx); }
+    else { if(dy >= -6) continue; primary = -dy; cross = Math.abs(dx); }
+    const score = primary + cross*2;   // avanza en esa dirección, priorizando alineación
+    if(score < bestScore){ bestScore = score; best = c; }
+  }
+  if(best) selectAlbumCard(best.dataset.id);
+}
+addEventListener('keydown', e => {
+  if(['ArrowRight','ArrowLeft','ArrowDown','ArrowUp'].includes(e.key)){ albumMove(e.key); e.preventDefault(); }
+});
+
+/* ============================================================
+   7) La CARTA GRANDE (componente .tcg) como string HTML.
+   ============================================================ */
+function tcgCard(id, ok){
+  const sp = SPIRITS[id], th = THEME[sp.th] || THEME.leyenda;
+  const holo = sp.rar === 'epic' || sp.rar === 'legendario' || sp.rar === 'mistico';  // brillo desde épica
+  return `<div class="tcg r-${sp.rar}${holo ? ' holo' : ''}${ok ? '' : ' locked'}">
+    <div class="tcg-inner">
+      <div class="tcg-top"><span class="tcg-name">${ok ? sp.nm : '???'}</span><span class="tcg-rarbadge r-${sp.rar}">${RARNAME[sp.rar]}</span></div>
+      <div class="tcg-art" style="background:linear-gradient(160deg,${th.g[0]},${th.g[1]})">${artImg(id, ok, 26, 'tcg-emoji')}</div>
+      <div class="tcg-type">${th.glyph} ${th.label} · ${sp.cat}</div>
+      <div class="tcg-desc">${ok ? sp.desc : '🔒 Cómo conseguirla: ' + sp.how}</div>
+      <div class="tcg-foot"><span>Nº ${sp.num}/${TOTAL3}</span><span>${th.label}</span></div>
+    </div>
+  </div>`;
+}
+
+// arrancar
+renderAlbum();
+</script>
+</body>
+</html>

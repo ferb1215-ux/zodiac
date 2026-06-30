@@ -1,50 +1,34 @@
-# Zodiac Fighters / Zodiac Road
+# 🐉 Zodiac Fighters
 
-Videojuego de navegador basado en los 12 animales del zodiaco chino. Estilo papel/origami,
-todo client-side (HTML + Canvas 2D + WebAudio), instalable como app (PWA) y jugable en movil y PC.
+Juego de pelea 2D con los 12 animales del zodiaco chino. Corre 100% en el navegador (PC y móvil), sin instalar nada, e instalable como app (PWA). Hecho por **WONEJO MALO Entertainment**.
 
-Estudio: **WONEJO MALO Entertainment**.
+👉 **Jugar:** abre `index.html` (o publícalo en GitHub Pages).
 
-## Como jugar
+## Modos de juego
+- 🌍 **Vuelta al Mundo** — viaja por un mapamundi, derrota al zodiaco en 24 ciudades reales (cada una con su escenario, bandera y dificultad) y conquista el mundo.
+- ⚔️ **Pelea vs CPU** — duelo 1 vs 1.
+- 🥊 **Modo Libre** — práctica con muñeco.
+- 🏯 **Torres** — escala rivales hasta el jefe.
+- 🎯 **Target Test** — rompe blancos a contrarreloj.
+- 📖 **Modo Historia** — el camino de cada animal (Rata y Buey disponibles).
+- ✨ **Espíritus** — álbum de cartas coleccionables, máquina y tienda.
 
-Abre `index.html` en el navegador. No requiere instalacion ni servidor.
-
-- **`index.html`** — Juego de pelea completo: titulo, seleccion, combate con especiales,
-  Torres (Bronce/Plata/Oro/Legendaria), Target Test, hub de Espiritus, tienda, misiones diarias,
-  racha, musica chiptune, modo libre/entrenamiento, combos y cinematicas.
-- **`aventura-prototipo.html`** — Prototipo del nuevo modo RPG por turnos (estilo Mario & Luigi):
-  overworld cenital, batallas a tiempo, ojos elementales combinables, biblioteca de espiritus.
-- **`cartas.html`** — Album imprimible de cartas coleccionables.
+## Controles
+- Moverse: flechas / joystick.  Saltar: ⤒.  Golpe: **A**.  Poder: **B**.  Agarrar: ✊.  Especial: ✦.
+- En Vuelta al Mundo se navega TODO con flechas (Enter elige, Esc vuelve).
 
 ## Estructura
+- `index.html` — el juego completo (Canvas + WebAudio).
+- `spirits-data.js`, `spirits-lore.js` — catálogo y textos de las cartas.
+- `cartas.html` — álbum imprimible.
+- `art/` — imágenes: `cartas/`, `menu/`, `stages/` (fondos de pelea), `world/` (mapamundi), `cine/`.
+- `historia/` — motor de novela visual + guiones.
+- `manifest.json`, `sw.js`, `icon-*.png` — soporte PWA (instalable).
+- `docs/` — prompts para generar más arte (fondos, mapa, menú, cartas) y el código del álbum.
 
-```
-index.html              Juego de pelea (principal)
-aventura-prototipo.html Prototipo RPG por turnos
-cartas.html             Album de cartas imprimible
-spirits-data.js         Catalogo de espiritus / cartas coleccionables
-manifest.json, sw.js    PWA (app instalable + offline)
-icon-192.png, icon-512.png  Iconos de la app
-art/                    Sprites de los peleadores (idle/ready/hit/ko)
-  cine/                 Cinematicas en video (.mp4)
-historia/               Modo historia (novela visual): motor vn-engine + guiones por animal
-docs-diseno/            PDFs de diseno (premortem, decisiones)
-*.md                    Documentos de diseno, roadmap y guias de produccion
-```
+## Publicar en GitHub Pages
+1. Sube TODO el contenido de esta carpeta al repositorio (la raíz debe tener `index.html`).
+2. En el repo: **Settings → Pages → Branch: main / (root) → Save**.
+3. En ~1 minuto queda en línea en `https://<usuario>.github.io/<repo>/`.
 
-## Desplegar en GitHub Pages
-
-1. Sube todo el contenido de esta carpeta al repositorio (`Add file -> Upload files` o `git push`).
-2. En el repo: **Settings -> Pages -> Branch: main / root -> Save**.
-3. En ~1 minuto el juego queda en vivo en `https://<usuario>.github.io/<repo>/`.
-
-Repo actual: `github.com/ferb1215-ux/zodiac` -> https://ferb1215-ux.github.io/zodiac/
-
-## Estado y pendientes
-
-- Sprites pixel art listos para 8 animales; faltan buey, conejo, cabra y perro.
-- Modo historia: Rata completa; resto pendiente.
-- Pivote en curso hacia el modo RPG (`aventura-prototipo.html`).
-- Cinematicas IA: se pre-generan y se colocan en `art/cine/` como `<id>-super.mp4` / `<id>-ex.mp4`.
-
-Ver `ZODIAC-FIGHTERS-ROADMAP.md` y `HISTORIA-Y-MUNDO.md` para el detalle.
+> Para agregar arte que falta (fondo `art/stages/fuji.png`, mapa, cartas) usa los prompts en `docs/`.

@@ -32,15 +32,15 @@
   add('Horóscopo Occidental','leyenda',[
    ['z_aries','Aries','♈','comun','21 mar–19 abr. Fuego. Impulsivo y valiente.','fuego'],
    ['z_tauro','Tauro','♉','comun','20 abr–20 may. Tierra. Terco e inamovible.','tierra'],
-   ['z_geminis','Géminis','♊','uncommon','21 may–20 jun. Aire. Dos mentes en un cuerpo.','viento'],
-   ['z_cancer','Cáncer','♋','uncommon','21 jun–22 jul. Agua. Coraza dura, corazón blando.','agua'],
-   ['z_leo','Leo','♌','rare','23 jul–22 ago. Fuego. Nació para reinar.','fuego'],
+   ['z_geminis','Géminis','♊','comun','21 may–20 jun. Aire. Dos mentes en un cuerpo.','viento'],
+   ['z_cancer','Cáncer','♋','comun','21 jun–22 jul. Agua. Coraza dura, corazón blando.','agua'],
+   ['z_leo','Leo','♌','comun','23 jul–22 ago. Fuego. Nació para reinar.','fuego'],
    ['z_virgo','Virgo','♍','comun','23 ago–22 sep. Tierra. Perfeccionista letal.','tierra'],
-   ['z_libra','Libra','♎','uncommon','23 sep–22 oct. Aire. Busca el golpe balanceado.','viento'],
-   ['z_escorpio','Escorpio','♏','rare','23 oct–21 nov. Agua. Aguijón venenoso.','agua'],
-   ['z_sagitario','Sagitario','♐','uncommon','22 nov–21 dic. Fuego. Arquero que no falla.','fuego'],
+   ['z_libra','Libra','♎','comun','23 sep–22 oct. Aire. Busca el golpe balanceado.','viento'],
+   ['z_escorpio','Escorpio','♏','comun','23 oct–21 nov. Agua. Aguijón venenoso.','agua'],
+   ['z_sagitario','Sagitario','♐','comun','22 nov–21 dic. Fuego. Arquero que no falla.','fuego'],
    ['z_capricornio','Capricornio','♑','comun','22 dic–19 ene. Tierra. Escala cualquier muro.','tierra'],
-   ['z_acuario','Acuario','♒','uncommon','20 ene–18 feb. Aire. Rebelde imprevisible.','viento'],
+   ['z_acuario','Acuario','♒','comun','20 ene–18 feb. Aire. Rebelde imprevisible.','viento'],
    ['z_piscis','Piscis','♓','comun','19 feb–20 mar. Agua. Fluye entre dos mundos.','agua']
   ]);
 
