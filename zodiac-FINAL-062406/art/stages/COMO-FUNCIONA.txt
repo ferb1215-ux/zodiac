@@ -1,0 +1,15 @@
+FONDOS DE PELEA POR LUGAR
+=========================
+Pon aquí los fondos con estos nombres EXACTOS (.png), apaisados 16:9:
+
+  pueblo, pekin, rio, cartagena, sidney, cdmx, compostela, bariloche,
+  amsterdam, niagara, cairo, moscu, anfield, curazao, napoles, pascua,
+  whitehouse, antigua, casablanca, ferrari, capadocia, maldivas,
+  petronas, corea
+
+Ej: art/stages/rio.png
+
+El juego elige uno al azar en cada pelea (y el modo Vuelta al Mundo usará
+el de cada ciudad). Si falta un fondo, usa la ciudad dibujada por código.
+Deja el cuarto inferior como piso plano (ahí se paran los peleadores).
+Los prompts están en PROMPTS-FONDOS.md.

@@ -1,0 +1,15 @@
+ARTE DEL MENÚ
+=============
+Pon aquí las 7 imágenes del menú con EXACTAMENTE estos nombres (.png):
+
+  fight.png      -> Pelea vs CPU
+  libre.png      -> Modo Libre
+  torres.png     -> Torres
+  target.png     -> Target Test
+  historia.png   -> Modo Historia
+  espiritus.png  -> Espíritus
+  maquina.png    -> Máquina
+
+El menú las muestra solas en el panel derecho. Si falta alguna, deja el
+personaje dibujado por código. Cuadradas (1:1), pixel art, sin texto.
+Los prompts están en PROMPTS-MENU.md.

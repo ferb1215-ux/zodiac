@@ -1,0 +1,25 @@
+ARTE DE LAS CARTAS COLECCIONABLES
+=================================
+
+Coloca aquí las imágenes que generes para cada carta, con el nombre EXACTO
+del id de la carta y extensión .png. Ejemplos:
+
+  l_gato.png        -> "El Gato Engañado"
+  l_jade.png        -> "Emperador de Jade"
+  gr_zeus.png       -> "Zeus" (Mitología Griega)
+
+El nombre de archivo de cada carta está en la columna "Archivo (.png)" del
+Excel PROMPTS-CARTAS.xlsx.
+
+CÓMO LO USA EL JUEGO
+- index.html y cartas.html buscan art/cartas/<id>.png automáticamente.
+- Si la imagen existe, la muestran dentro del recuadro de la carta.
+- Si NO existe, muestran el emoji pixelado de siempre (no se rompe nada).
+
+RECOMENDADO
+- Imagen cuadrada (1:1), PNG.
+- Pixel art, sin texto ni marco (la carta ya pone nombre, rareza y número).
+- El recuadro recorta a "cover", así que deja algo de aire alrededor del personaje.
+
+Puedes ir agregando imágenes de a poco: cada carta se actualiza sola cuando
+aparece su archivo.
