@@ -1,0 +1,11 @@
+MAPAMUNDI DE "VUELTA AL MUNDO"
+==============================
+Pon aquí el mapa con este nombre EXACTO:
+
+  world.png
+
+Debe ser un mapamundi PLANO (equirectangular), apaisado 2:1, que llene todo
+el cuadro, sin texto ni marcas (los focos los pone el juego encima).
+
+El prompt está en PROMPTS-MAPA.md.
+Si falta world.png, el juego dibuja un mapa por código (provisional).
